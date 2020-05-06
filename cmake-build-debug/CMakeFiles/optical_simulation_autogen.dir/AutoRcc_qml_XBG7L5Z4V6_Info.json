@@ -1,0 +1,19 @@
+{
+	"BUILD_DIR" : "/home/michael/developing/optical-simulation/cmake-build-debug/optical_simulation_autogen",
+	"CMAKE_BINARY_DIR" : "/home/michael/developing/optical-simulation/cmake-build-debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/michael/developing/optical-simulation/cmake-build-debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/michael/developing/optical-simulation",
+	"CMAKE_SOURCE_DIR" : "/home/michael/developing/optical-simulation",
+	"INCLUDE_DIR" : "/home/michael/developing/optical-simulation/cmake-build-debug/optical_simulation_autogen/include",
+	"INPUTS" : [ "/home/michael/developing/optical-simulation/interface/main.qml" ],
+	"LOCK_FILE" : "/home/michael/developing/optical-simulation/cmake-build-debug/CMakeFiles/optical_simulation_autogen.dir/AutoRcc_qml_XBG7L5Z4V6_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "qml" ],
+	"OUTPUT_CHECKSUM" : "XBG7L5Z4V6",
+	"OUTPUT_NAME" : "qrc_qml.cpp",
+	"RCC_EXECUTABLE" : "/usr/bin/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/michael/developing/optical-simulation/cmake-build-debug/CMakeFiles/optical_simulation_autogen.dir/AutoRcc_qml_XBG7L5Z4V6_Used.txt",
+	"SOURCE" : "/home/michael/developing/optical-simulation/interface/qml.qrc",
+	"VERBOSITY" : 0
+}
