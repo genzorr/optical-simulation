@@ -1,4 +1,0 @@
-/home/michael/developing/optical-simulation/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/michael/developing/optical-simulation/cmake-build-debug/CMakeFiles/optical_simulation.dir
-/home/michael/developing/optical-simulation/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/michael/developing/optical-simulation/cmake-build-debug/CMakeFiles/optical_simulation_autogen.dir

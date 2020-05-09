@@ -10,16 +10,12 @@ ApplicationWindow {
     property int margin: 10
     width: 800
     height: 600
-//    width: grid.implicitWidth + 2 * margin
-//    height: grid.implicitHeight + 2 * margin
-//    minimumWidth: grid.Layout.minimumWidth + 2 * margin
-//    minimumHeight: grid.Layout.minimumHeight + 2 * margin
 
     GridLayout {
         id: grid
         anchors.fill: parent
         anchors.margins: margin
-        rows: 13
+        rows: 12
         columns: 12
         columnSpacing: margin
         rowSpacing: margin
@@ -36,86 +32,36 @@ ApplicationWindow {
 
         Rectangle {
             color: "red"
-            Layout.columnSpan: 12
-            Layout.rowSpan: 1
-            Layout.preferredWidth: grid.prefWidth(this, 0, 2)
-            Layout.preferredHeight: grid.prefHeight(this, 2/3, 2/3)
+            Layout.columnSpan: 8
+            Layout.rowSpan: 10
+            Layout.preferredWidth: grid.prefWidth(this, 1/2, 1)
+            Layout.preferredHeight: grid.prefHeight(this, 1/2, 1)
         }
 
         Rectangle {
             color: "green"
-            Layout.columnSpan: 6
-            Layout.rowSpan: 10
+            Layout.columnSpan: 4
+            Layout.rowSpan: 6
             Layout.preferredWidth: grid.prefWidth(this, 1/2, 1)
-            Layout.preferredHeight: grid.prefHeight(this, 2/3, 2/3)
+            Layout.preferredHeight: grid.prefHeight(this, 1/2, 1)
         }
 
         Rectangle {
             color: "green"
-            Layout.columnSpan: 6
-            Layout.rowSpan: 10
+            Layout.columnSpan: 8
+            Layout.rowSpan: 2
             Layout.preferredWidth: grid.prefWidth(this, 1/2, 1)
-            Layout.preferredHeight: grid.prefHeight(this, 2/3, 2/3)
+            Layout.preferredHeight: grid.prefHeight(this, 1/2, 1)
         }
 
         Rectangle {
             color: "yellow"
-            Layout.columnSpan: 12
-            Layout.rowSpan: 2
-            Layout.preferredWidth: grid.prefWidth(this, 0, 2)
-            Layout.preferredHeight: grid.prefHeight(this, 2/3, 2/3)
+            Layout.columnSpan: 4
+            Layout.rowSpan: 6
+            Layout.preferredWidth: grid.prefWidth(this, 1/2, 1)
+            Layout.preferredHeight: grid.prefHeight(this, 1/2, 1)
+            Layout.row: 6
+            Layout.column: 8
         }
     }
 }
-/*
-    RowLayout {
-        id: row
-        anchors.fill: parent
-        anchors.margins: root.margin
-        spacing: 10
-
-        ColumnLayout {
-            id: col1
-            spacing: 10
-//            Layout.preferredWidth: 0.7*parent.width
-            Layout.fillWidth: true
-            column: 6
-
-           Rectangle {
-                id: fieldRect
-                color: 'red'
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-            }
-            Rectangle {
-                id: logRect
-                color: 'green'
-                Layout.preferredHeight: 0.2*parent.height
-                Layout.fillWidth: true
-            }
-        }
-
-        ColumnLayout {
-            id: col2
-            spacing: 10
-            Layout.preferredWidth: 0.3*parent.width
-            Layout.fillWidth: false
-
-           Rectangle {
-                id: imageRect
-                color: 'blue'
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-            }
-            Rectangle {
-                id: objectRect
-                color: 'yellow'
-                Layout.preferredHeight: 0.5*parent.height
-                Layout.fillWidth: true
-            }
-        }
-    }
-*//*
-
-}
-*/
