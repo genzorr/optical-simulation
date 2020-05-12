@@ -18,10 +18,10 @@ find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
 include_directories(optical_simulation PUBLIC include)
 file(GLOB SOURCES
-        include/*.h
         src/*.cpp
-        interface/*.qrc
-        interface/*.qml
+        src/sfml/*.cpp
+        src/sfml/*.h
+        interface/*.*
         )
 add_executable(optical_simulation ${SOURCES})
 
