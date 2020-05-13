@@ -26,13 +26,11 @@ QSFMLCanvas::QSFMLCanvas(QWidget* parent, uint frameTime) :
 void QSFMLCanvas::onInit()
 {
     resize(parentWidget()->size());
-    clear(sf::Color::Red);
 }
 
 void QSFMLCanvas::onUpdate()
 {
     resize(parentWidget()->size());
-    clear(sf::Color::Red);
 }
 
 QPaintEngine* QSFMLCanvas::paintEngine() const

@@ -18,11 +18,13 @@ public:
     explicit QSFMLCanvas(QWidget* parent = nullptr, uint frameTime = 50);
     virtual ~QSFMLCanvas() {}
 
-private :
+protected:
     // First init of widget.
-    void onInit();
+    virtual void onInit();
     // Before widget update.
-    void onUpdate();
+    virtual void onUpdate();
+
+private:
     // Returns Qt's paint engine.
     virtual QPaintEngine* paintEngine() const override;
     // For open and close, used on first init.

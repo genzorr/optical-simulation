@@ -1,16 +1,18 @@
 #include <QMainWindow>
 #include <QSizePolicy>
 #include <QFrame>
+
 #include "interface.h"
-#include "../src/sfml/QSFMLCanvas.h"
+#include "FieldCanvas.h"
+#include "ImageCanvas.h"
 
 void InterfaceSetup(QMainWindow& window, Ui::MainWindow& ui)
 {
     ui.setupUi(&window);
 
-    QSFMLCanvas* fieldCanvas = new QSFMLCanvas(ui.fieldFrame, 50);
+    FieldCanvas* fieldCanvas = new FieldCanvas(ui.fieldFrame);
     fieldCanvas->show();
 
-    QSFMLCanvas* imageCanvas = new QSFMLCanvas(ui.imageFrame, 50);
+    ImageCanvas* imageCanvas = new ImageCanvas(ui.imageFrame);
     imageCanvas->show();
 }

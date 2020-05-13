@@ -16,7 +16,7 @@ find_package(Qt5Quick REQUIRED)
 # SFML
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
-include_directories(optical_simulation PUBLIC include)
+include_directories(optical_simulation PUBLIC interface src src/sfml)
 file(GLOB SOURCES
         src/*.cpp
         src/sfml/*.cpp

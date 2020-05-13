@@ -2,8 +2,8 @@
 #include <QMainWindow>
 #include <QtWidgets/QWidget>
 
-#include "../interface/interface.h"
-#include "sfml/QSFMLCanvas.h"
+#include "interface.h"
+#include "QSFMLCanvas.h"
 
 int main(int argc, char *argv[])
 {
