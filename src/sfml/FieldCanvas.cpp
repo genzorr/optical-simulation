@@ -9,7 +9,7 @@ void FieldCanvas::onInit()
 
 void FieldCanvas::onUpdate()
 {
-    QSFMLCanvas::onInit();
+    QSFMLCanvas::onUpdate();
 
     clear(sf::Color::Blue);
 }

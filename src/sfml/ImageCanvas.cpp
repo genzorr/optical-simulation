@@ -1,5 +1,9 @@
 #include "parameters.h"
 #include "ImageCanvas.h"
+#include <QDebug>
+
+int WindowXSize;
+int WindowYSize;
 
 void ImageCanvas::onInit()
 {
@@ -14,7 +18,13 @@ void ImageCanvas::onInit()
 
 void ImageCanvas::onUpdate()
 {
-    QSFMLCanvas::onInit();
+    QSFMLCanvas::onUpdate();
+
+    // Get image size for later usage.
+    WindowXSize = this->getSize().x;
+    WindowYSize = this->getSize().y;
+
+    qDebug() << WindowXSize << WindowYSize;
 
     clear(sf::Color::Red);
 }

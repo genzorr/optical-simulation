@@ -13,7 +13,9 @@ int main(int argc, char *argv[])
     Ui::MainWindow ui;
 
     InterfaceSetup(mainWindow, ui);
-    mainWindow.showMaximized();
+    mainWindow.show();
+//    mainWindow.setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
+//    mainWindow.showMaximized();
 
     return app.exec();
 }

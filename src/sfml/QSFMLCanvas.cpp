@@ -10,7 +10,7 @@
 
 QSFMLCanvas::QSFMLCanvas(QWidget* parent, uint frameTime) :
     QWidget(parent),
-    sf::RenderWindow(sf::VideoMode(10, 10), "this title", sf::Style::Default, sf::ContextSettings(24)),
+    sf::RenderWindow(sf::VideoMode(10, 10), "", sf::Style::Default, sf::ContextSettings(24)),
     m_initialized(false)
 {
     // Settings needed to paint to widget directly.
@@ -18,19 +18,23 @@ QSFMLCanvas::QSFMLCanvas(QWidget* parent, uint frameTime) :
     setAttribute(Qt::WA_OpaquePaintEvent);
     setAttribute(Qt::WA_NoSystemBackground);
 
-    setFocusPolicy(Qt::StrongFocus);
+//    setFocusPolicy(Qt::StrongFocus);
 
     m_timer.setInterval(frameTime);
 }
 
 void QSFMLCanvas::onInit()
 {
-    resize(parentWidget()->size());
+    QSize parentSize = parentWidget()->size();
+    qDebug() << parentSize << "init" << m_initialized;
+//    resize(parentSize);
+//    sf::FloatRect visibleArea(0, 0, parentSize.width(), parentSize.height());
+//    this->setView(sf::View(visibleArea));
 }
 
 void QSFMLCanvas::onUpdate()
 {
-    resize(parentWidget()->size());
+//    resize(parentWidget()->size());
 }
 
 QPaintEngine* QSFMLCanvas::paintEngine() const
