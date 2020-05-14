@@ -10,8 +10,9 @@ class Transparency
 {
 public:
     Transparency();
-    Transparency(ObjType objType, int XSize);             // EDGE, GAP or CIRCLE
-    Transparency(dataT** field, int XSize, int YSize);    // random field Xsize*Ysize
+    Transparency(ObjType objType, int XSize);           // EDGE, GAP or CIRCLE
+    Transparency(dataT2D& field, int XSize, int YSize); // random field XSize*YSize
+    virtual ~Transparency() {}
     void plot();
 
 public:

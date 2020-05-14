@@ -1,12 +1,5 @@
 #include "QSFMLCanvas.h"
 
-#include <string>
-
-#include <QPixmap>
-#include <QByteArray>
-#include <QBuffer>
-#include <QDebug>
-
 
 QSFMLCanvas::QSFMLCanvas(QWidget* parent, uint frameTime) :
     QWidget(parent),
@@ -25,16 +18,12 @@ QSFMLCanvas::QSFMLCanvas(QWidget* parent, uint frameTime) :
 
 void QSFMLCanvas::onInit()
 {
-    QSize parentSize = parentWidget()->size();
-    qDebug() << parentSize << "init" << m_initialized;
-//    resize(parentSize);
-//    sf::FloatRect visibleArea(0, 0, parentSize.width(), parentSize.height());
-//    this->setView(sf::View(visibleArea));
+    //
 }
 
 void QSFMLCanvas::onUpdate()
 {
-//    resize(parentWidget()->size());
+    //
 }
 
 QPaintEngine* QSFMLCanvas::paintEngine() const
@@ -71,6 +60,13 @@ void QSFMLCanvas::paintEvent(QPaintEvent*)
 
     // Display repainted window.
     display();
+}
+
+void QSFMLCanvas::resizeEvent(QResizeEvent *event)
+{
+    QSize parentSize = parentWidget()->size();
+    resize(parentSize);
+    this->setSize(sf::Vector2u(parentSize.width(), parentSize.height()));
 }
 
 void QSFMLCanvas::onTimeout()

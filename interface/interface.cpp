@@ -1,18 +1,47 @@
 #include <QMainWindow>
-#include <QSizePolicy>
+#include <QDebug>
 #include <QFrame>
+#include <QMoveEvent>
 
 #include "interface.h"
 #include "FieldCanvas.h"
 #include "ImageCanvas.h"
 
-void InterfaceSetup(QMainWindow& window, Ui::MainWindow& ui)
+
+MainWindow::MainWindow()
 {
-    ui.setupUi(&window);
+//    uncomment if you want your app be not fullscreen
+//    time: 3 hours of stupid work, and this thing doesnt work properly
+//    resizeTimer.setSingleShot( true );
+//    connect( &resizeTimer, SIGNAL(timeout()), SLOT(resizeDone()));
+
+    Ui::MainWindow ui;
+    ui.setupUi(this);
 
     FieldCanvas* fieldCanvas = new FieldCanvas(ui.fieldFrame);
-    fieldCanvas->show();
+    ui.hl11->addWidget(fieldCanvas);
 
     ImageCanvas* imageCanvas = new ImageCanvas(ui.imageFrame);
-    imageCanvas->show();
+    ui.hl12->addWidget(imageCanvas);
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+    if (!m_resizeDone)
+    {
+        resizeTimer.start(500);
+        QMainWindow::resizeEvent(event);
+        m_resizeDone = true;
+    }
+}
+
+void MainWindow::moveEvent(QMoveEvent *event)
+{
+    event->ignore();
+}
+
+void MainWindow::resizeDone()
+{
+    setFixedSize(size());
+    setMinimumSize(size());
 }

@@ -23,6 +23,8 @@ protected:
     virtual void onInit();
     // Before widget update.
     virtual void onUpdate();
+    // Resizes widget and SFML RenderWindow
+    virtual void resizeEvent(QResizeEvent *event);
 
 private:
     // Returns Qt's paint engine.

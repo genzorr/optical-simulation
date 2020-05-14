@@ -1,6 +1,7 @@
 #ifndef OPTICAL_SIMULATION_IMAGECANVAS_H
 #define OPTICAL_SIMULATION_IMAGECANVAS_H
 
+#include "parameters.h"
 #include "QSFMLCanvas.h"
 
 /*
@@ -18,6 +19,8 @@ private:
     virtual void onInit();
     // Before widget update.
     virtual void onUpdate();
+    // Custom resizeEvent.
+    virtual void resizeEvent(QResizeEvent *event);
 };
 
 
