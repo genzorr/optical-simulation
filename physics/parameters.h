@@ -2,6 +2,8 @@
 #define OPTICAL_SIMULATION_PARAMETERS_H
 
 #include <vector>
+#include <QObject>
+#include <QWidget>
 
 typedef float dataT;
 typedef std::vector<std::vector<dataT>> dataT2D;

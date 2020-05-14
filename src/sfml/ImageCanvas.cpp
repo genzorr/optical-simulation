@@ -1,4 +1,5 @@
 #include "ImageCanvas.h"
+#include "Transparency.h"
 
 int WindowXSize;
 int WindowYSize;
@@ -14,7 +15,7 @@ void ImageCanvas::onUpdate()
 {
     QSFMLCanvas::onUpdate();
 
-    clear(sf::Color::Red);
+    
 }
 
 void ImageCanvas::resizeEvent(QResizeEvent *event)
