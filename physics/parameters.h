@@ -17,6 +17,8 @@ enum ObjType
     CIRCLE
 };
 
+extern const int OBJECT_CNT;
+
 extern int WindowXSize;
 extern int WindowYSize;
 

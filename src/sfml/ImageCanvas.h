@@ -3,6 +3,7 @@
 
 #include "parameters.h"
 #include "QSFMLCanvas.h"
+#include "Transparency.h"
 
 /*
  * Subclass used to draw result image.
@@ -21,6 +22,9 @@ private:
     virtual void onUpdate();
     // Custom resizeEvent.
     virtual void resizeEvent(QResizeEvent *event);
+
+private:
+    ObjHolder objHolder;
 };
 
 

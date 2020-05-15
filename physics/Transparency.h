@@ -9,18 +9,23 @@
  */
 class Transparency : public QObject
 {
+Q_OBJECT
 public:
     Transparency();
+    Transparency(const Transparency& object);
     Transparency(ObjType objType, int XSize);           // EDGE, GAP or CIRCLE
     Transparency(dataT2D& field, int XSize, int YSize); // random field XSize*YSize
     virtual ~Transparency() {}
-    void plot(sf::RenderWindow& window);
 
 public:
     ObjType type;
     dataT2D opaque;
+    sf::Image image;
+    sf::Texture texture;
     sf::Sprite sprite;
 };
+
+typedef std::vector<Transparency> ObjHolder;
 
 
 #endif //OPTICAL_SIMULATION_TRANSPARENCY_H
