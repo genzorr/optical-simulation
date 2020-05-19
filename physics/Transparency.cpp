@@ -17,9 +17,14 @@ Transparency::Transparency(const Transparency &object)
     type = object.type;
 
     opaque = object.opaque;
+    opaque.resize(0);
+    for (int i = 0; i < object.opaque.size(); i++)
+        opaque.push_back(object.opaque[i]);
 
-    image.copy(object.image, WindowXSize, WindowYSize, sf::IntRect(0,0,WindowXSize, WindowYSize));
-    image = object.image;
+    const sf::Rect rect(0,0, WindowXSize, WindowYSize);
+    image.create(WindowXSize, WindowYSize, sf::Color::Black);
+    image.copy(object.image, 0, 0, rect, true);
+
     texture.loadFromImage(image);
     sprite.setTexture(texture);
 }
