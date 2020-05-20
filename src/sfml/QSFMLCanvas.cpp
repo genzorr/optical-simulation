@@ -1,4 +1,6 @@
+#include "parameters.h"
 #include "QSFMLCanvas.h"
+#include <QDebug>
 
 
 QSFMLCanvas::QSFMLCanvas(QWidget* parent, uint frameTime) :
@@ -64,9 +66,15 @@ void QSFMLCanvas::paintEvent(QPaintEvent*)
 
 void QSFMLCanvas::resizeEvent(QResizeEvent *event)
 {
-    QSize parentSize = parentWidget()->size();
-    resize(parentSize);
-    this->setSize(sf::Vector2u(parentSize.width(), parentSize.height()));
+    QWidget::resizeEvent(event);
+    setSize(sf::Vector2u(size().width(), size().height()));
+    sf::FloatRect r(0, 0, WindowXSize, WindowYSize);
+    sf::View v(r);
+    setView(v);
+//    qDebug() << size() << getSize().x << getSize().y;
+//    QSize parentSize = parentWidget()->size();
+//    resize(parentSize);
+//    this->setSize(sf::Vector2u(parentSize.width(), parentSize.height()));
 }
 
 void QSFMLCanvas::onTimeout()

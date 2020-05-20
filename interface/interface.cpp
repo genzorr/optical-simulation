@@ -23,6 +23,7 @@ MainWindow::MainWindow()
 
     ImageCanvas* imageCanvas = new ImageCanvas(ui.imageFrame);
     ui.hl12->addWidget(imageCanvas);
+    ui.hl12->setContentsMargins(125, 98, 124, 98);
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)

@@ -28,20 +28,20 @@ Transparency::Transparency(ObjType objType, int XSize) : type(objType)
     if (objType == EDGE)
     {
         int edgeXCoordinate = (WindowXSize / 2) - XSize;
-        for (int x = 0; x < WindowXSize; x++)
+        for (int x = edgeXCoordinate; x < WindowXSize; x++)
         {
-            if (x < edgeXCoordinate)
-            {
-                std::fill(opaque[x].begin(), opaque[x].end(), 0.0);
-                for (int y = 0; y < WindowYSize; y++)
-                    image.setPixel(x, y, sf::Color::Black);
-            }
-            else
-            {
+//            if (x < edgeXCoordinate)
+//            {
+//                std::fill(opaque[x].begin(), opaque[x].end(), 0.0);
+//                for (int y = 0; y < WindowYSize; y++)
+//                    image.setPixel(x, y, sf::Color::Black);
+//            }
+//            else
+//            {
                 std::fill(opaque[x].begin(), opaque[x].end(), 1.0);
                 for (int y = 0; y < WindowYSize; y++)
                     image.setPixel(x, y, sf::Color::White);
-            }
+//            }
         }
     }
 

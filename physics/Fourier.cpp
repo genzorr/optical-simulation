@@ -4,7 +4,8 @@ const dataT eps = 0.000001;
 
 bool isEqual(dataT a, dataT b)
 {
-    return (a < b - eps) and (a > b + eps);
+    return (fabs(a-b) < eps);
+//    return (a < b - eps) or (a > b + eps);
 }
 
 complex GrinFunction(int x, int y, int z, dataT lambda)
@@ -16,20 +17,26 @@ complex GrinFunction(int x, int y, int z, dataT lambda)
     dataT x_2 = x*x;
     dataT y_2 = y*y;
     dataT z_2 = z*z;
-    dataT kx1 = - k * z / sqrt(z_2+x_2);
-    dataT kx2 = k * z / sqrt(z_2+(WindowXSize-x)*(WindowXSize-x));
-    dataT ky1 = - k * z / sqrt(z_2+y_2);
-    dataT ky2 = k * z / sqrt(z_2+(WindowYSize-y)*(WindowYSize-y));
+
+    dataT xOther = WindowXSize - x;
+    dataT yOther = WindowYSize - y;
+    dataT kx1 = - k * x / sqrt(z_2+x_2);
+    dataT kx2 = k * xOther / sqrt(z_2+xOther*xOther);
+    dataT ky1 = - k * y / sqrt(z_2+y_2);
+    dataT ky2 = k * yOther / sqrt(z_2+yOther*yOther);
 
 
-    for (dataT kx = kx1; kx < kx2; kx += 10)
+    for (dataT kx = kx1; kx < kx2; kx += 100000)
     {
         dataT kx_2 = kx*kx;
-        for (dataT ky = ky1; ky < ky2; ky += 10)
+        for (dataT ky = ky1; ky < ky2; ky += 100000)
         {
-            dataT kz = sqrt(k_2 - kx_2 - ky*ky);
+            dataT kz_2 = k_2 - kx_2 - ky*ky;
+            if (kz_2 < 0.0)
+                continue;
+            dataT kz = sqrt(kz_2);
             dataT value = kx*x + ky*y + kz*z;
-            result += (cos(value), sin(value));
+            result += (cos(value), -sin(value));
         }
     }
 

@@ -50,13 +50,13 @@
          </sizepolicy>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
         <property name="lineWidth">
-         <number>3</number>
+         <number>1</number>
         </property>
         <layout class="QHBoxLayout" name="hl11">
          <property name="spacing">
@@ -86,13 +86,13 @@
          </sizepolicy>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
         <property name="lineWidth">
-         <number>3</number>
+         <number>1</number>
         </property>
         <layout class="QHBoxLayout" name="hl12">
          <property name="spacing">
