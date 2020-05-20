@@ -17,6 +17,9 @@ public:
     Transparency(dataT2D& field, int XSize, int YSize); // random field XSize*YSize
     virtual ~Transparency() {}
 
+    void init(const Transparency &object);
+    void OpaquetoImage();
+
 public:
     ObjType type;
     dataT2D opaque;

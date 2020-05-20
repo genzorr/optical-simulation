@@ -4,9 +4,11 @@
 #include <vector>
 #include <QObject>
 #include <QWidget>
+#include <complex>
 
-typedef float dataT;
+typedef double dataT;
 typedef std::vector<std::vector<dataT>> dataT2D;
+typedef std::complex<dataT> complex;
 
 // Type of the transparency object.
 enum ObjType

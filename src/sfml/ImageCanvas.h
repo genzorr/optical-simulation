@@ -12,7 +12,7 @@ class ImageCanvas : public QSFMLCanvas
 {
 Q_OBJECT
 public:
-    explicit ImageCanvas(QWidget* parent = nullptr) : QSFMLCanvas(parent) {}
+    explicit ImageCanvas(QWidget* parent = nullptr);
     virtual ~ImageCanvas() override {}
 
 private:
@@ -23,7 +23,8 @@ private:
     // Custom resizeEvent.
     virtual void resizeEvent(QResizeEvent *event);
 
-private:
+public:
+    Transparency resultObject;
     ObjHolder objHolder;
 };
 
