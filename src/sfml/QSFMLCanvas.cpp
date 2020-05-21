@@ -67,10 +67,12 @@ void QSFMLCanvas::paintEvent(QPaintEvent*)
 void QSFMLCanvas::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
-    setSize(sf::Vector2u(size().width(), size().height()));
-    sf::FloatRect r(0, 0, WindowXSize, WindowYSize);
+
+    setSize(sf::Vector2u(size().width(), size().height())); // changes size of render zone
+    sf::FloatRect r(0, 0, WindowXSize, WindowYSize);   // changes size of render window
     sf::View v(r);
     setView(v);
+
 //    qDebug() << size() << getSize().x << getSize().y;
 //    QSize parentSize = parentWidget()->size();
 //    resize(parentSize);

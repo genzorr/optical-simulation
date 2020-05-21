@@ -18,11 +18,17 @@ public:
     virtual ~Transparency() {}
 
     void init(const Transparency &object);
-    void OpaquetoImage();
+    void CopyOpaqueFourier();
+    void OpaqueImage();
+    void CreateFourierImage();
+    void CreateInverseFourierImage();
+    void ApplyFourierImage();
+    void CreateImage(dataT z, dataT lambda);
 
 public:
     ObjType type;
     dataT2D opaque;
+    dataT2Dc fourierImage;
     sf::Image image;
     sf::Texture texture;
     sf::Sprite sprite;

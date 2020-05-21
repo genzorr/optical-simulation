@@ -7,8 +7,9 @@
 #include <complex>
 
 typedef double dataT;
-typedef std::vector<std::vector<dataT>> dataT2D;
 typedef std::complex<dataT> complex;
+typedef std::vector<std::vector<dataT>> dataT2D;
+typedef std::vector<std::vector<complex>> dataT2Dc;
 
 // Type of the transparency object.
 enum ObjType
@@ -16,7 +17,8 @@ enum ObjType
     NO = 0,
     EDGE,
     GAP,
-    CIRCLE
+    CIRCLE,
+    SQUARE
 };
 
 extern const int OBJECT_CNT;

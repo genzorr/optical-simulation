@@ -13,7 +13,6 @@ ImageCanvas::ImageCanvas(QWidget *parent) : QSFMLCanvas(parent), resultObject() 
 void ImageCanvas::onInit()
 {
     QSFMLCanvas::onInit();
-//    setSize(sf::Vector2u(256,256));
 
     // Fill in resultObject properly.
     Transparency cleanObj = Transparency();
@@ -23,12 +22,15 @@ void ImageCanvas::onInit()
     objHolder.resize(1);
     objHolder.clear();
 
-    Transparency circleObj(EDGE, 20);
-//    Transparency circleObj = Transparency();
-    objHolder.push_back(circleObj);
-//    dataT lambda = 500E-9;
-//    CountFieldIntensity(circleObj.opaque, resultObject.opaque, 50, lambda);
-//    resultObject.OpaquetoImage();
+    dataT lambda = 500E-9;
+
+    Transparency edge(EDGE, 20);
+    edge.CreateImage(10000, lambda);
+//    objHolder.push_back(edge);
+
+    Transparency square(SQUARE, 50);
+    square.CreateImage(10000, lambda);
+    objHolder.push_back(square);
 }
 
 void ImageCanvas::onUpdate()
