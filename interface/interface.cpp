@@ -24,6 +24,9 @@ MainWindow::MainWindow()
     ImageCanvas* imageCanvas = new ImageCanvas(ui.imageFrame);
     ui.hl12->addWidget(imageCanvas);
     ui.hl12->setContentsMargins(125, 98, 124, 98);
+
+    connect(ui.sizeBox, QOverload<int>::of(&QSpinBox::valueChanged), &(imageCanvas->resultObject), &Transparency::UpdateSize);
+    connect(ui.fourierButton, &QPushButton::pressed, &(imageCanvas->resultObject), &Transparency::UpdateFourier);
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)

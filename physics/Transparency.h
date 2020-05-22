@@ -12,18 +12,24 @@ class Transparency : public QObject
 Q_OBJECT
 public:
     Transparency();
-    Transparency(const Transparency& object);
+    Transparency(const Transparency& object);   // construct object from given
     Transparency(ObjType objType, int XSize);           // EDGE, GAP or CIRCLE
     Transparency(dataT2D& field, int XSize, int YSize); // random field XSize*YSize
     virtual ~Transparency() {}
 
-    void init(const Transparency &object);
+    void Init(const Transparency &object);
+    void Update(int size);
     void CopyOpaqueFourier();
     void OpaqueImage();
     void CreateFourierImage();
     void CreateInverseFourierImage();
     void ApplyFourierImage();
-    void CreateImage(dataT z, dataT lambda);
+    void CreateImage(dataT z, dataT lambda, dataT scale);
+    void FourierNormalize();
+
+public slots:
+    void UpdateSize(int size);
+    void UpdateFourier();
 
 public:
     ObjType type;

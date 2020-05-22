@@ -30,8 +30,6 @@ file(GLOB SOURCES
         src/sfml/*.*
         interface/*.*
         physics/*.*
-#        physics/Fourier.cpp
-#        physics/Fourier.h
         )
 add_executable(optical_simulation ${SOURCES})
 

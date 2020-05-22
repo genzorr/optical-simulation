@@ -6,7 +6,6 @@
 int WindowXSize = 512;
 int WindowYSize = 512;
 
-//const int OBJECT_CNT = 10;
 
 ImageCanvas::ImageCanvas(QWidget *parent) : QSFMLCanvas(parent), resultObject() {}
 
@@ -15,8 +14,8 @@ void ImageCanvas::onInit()
     QSFMLCanvas::onInit();
 
     // Fill in resultObject properly.
-    Transparency cleanObj = Transparency();
-    resultObject.init(cleanObj);
+    Transparency cleanObj = Transparency(SQUARE, 0);
+    resultObject.Init(cleanObj);
 
     // Fill in object holder.
     objHolder.resize(1);
@@ -24,13 +23,20 @@ void ImageCanvas::onInit()
 
     dataT lambda = 500E-9;
 
-    Transparency edge(EDGE, 20);
-    edge.CreateImage(10000, lambda);
+    Transparency edge(EDGE, 30);
+    edge.CreateImage(0.3, lambda, 10E-6);
 //    objHolder.push_back(edge);
 
-    Transparency square(SQUARE, 50);
-    square.CreateImage(10000, lambda);
-    objHolder.push_back(square);
+    Transparency gap(GAP, 50);
+    gap.CreateImage(1, lambda, 10E-6);
+//    objHolder.push_back(gap);
+
+
+    Transparency square(SQUARE, 64);
+//    square.CreateImage(1, lambda, 10E-6);
+//    square.CreateFourierImage();
+//    square.ApplyFourierImage();
+//    objHolder.push_back(square);
 }
 
 void ImageCanvas::onUpdate()
@@ -39,10 +45,10 @@ void ImageCanvas::onUpdate()
 
     clear(sf::Color::White);
 
-    for (auto& obj: objHolder) {
-        draw(obj.sprite);
-    }
-//    draw(resultObject.sprite);
+//    for (auto& obj: objHolder) {
+//        draw(obj.sprite);
+//    }
+    draw(resultObject.sprite);
 }
 
 void ImageCanvas::resizeEvent(QResizeEvent *event)
