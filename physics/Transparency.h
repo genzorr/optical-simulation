@@ -20,6 +20,7 @@ public:
     void Init(const Transparency &object);
     void Update(int size);
     void CopyOpaqueFourier();
+    void setRelativeOpaque(const Transparency *object = nullptr);
     void OpaqueImage();
     void CreateFourierImage();
     void CreateInverseFourierImage();
@@ -33,7 +34,8 @@ public slots:
 
 public:
     ObjType type;
-    dataT2D opaque;
+    dataT2D absoluteOpaque; /// Characteristic of the object itself  1 - transparent 0 - not transparent
+    dataT2D relativeOpaque;         /// Relative to falling light            1 - transparent 0 - not transparent
     dataT2Dc fourierImage;
     sf::Image image;
     sf::Texture texture;

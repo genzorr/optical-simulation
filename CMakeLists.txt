@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.15)
 project(optical_simulation)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -34,4 +34,5 @@ file(GLOB SOURCES
 add_executable(optical_simulation ${SOURCES})
 
 target_link_libraries(optical_simulation Qt5::Core Qt5::Widgets Qt5::Quick)
+#target_link_libraries(optical_simulation Qt5::Core Qt5::Widgets)
 target_link_libraries(optical_simulation sfml-graphics sfml-window sfml-system)

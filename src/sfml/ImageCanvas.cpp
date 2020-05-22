@@ -14,7 +14,7 @@ void ImageCanvas::onInit()
     QSFMLCanvas::onInit();
 
     // Fill in resultObject properly.
-    Transparency cleanObj = Transparency(SQUARE, 0);
+    Transparency cleanObj = Transparency(SQUARE, 2);
     resultObject.Init(cleanObj);
 
     // Fill in object holder.
