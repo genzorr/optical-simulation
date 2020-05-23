@@ -58,3 +58,7 @@ void ImageCanvas::resizeEvent(QResizeEvent *event)
 //    WindowXSize = this->getSize().x;
 //    WindowYSize = this->getSize().y;
 }
+
+Transparency *ImageCanvas::getObject() {
+    return &resultObject;
+}

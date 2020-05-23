@@ -23,6 +23,15 @@ Transparency::Transparency() : type(NO)
     texture.create(WindowXSize, WindowYSize);
     texture.loadFromImage(image);
     sprite.setTexture(texture);
+
+    ///Init everything for preview
+    imagePreview.create(WindowXSize, WindowYSize, sf::Color::White);
+    texturePreview.create(WindowXSize, WindowYSize);
+    texturePreview.loadFromImage(imagePreview);
+    spritePreview.setTexture(texturePreview);
+
+    createPreview({100, 100}, PREVIEW_PIXEL_SIZE);
+
 }
 
 Transparency::Transparency(ObjType objType, int XSize) : type(objType)
@@ -31,6 +40,7 @@ Transparency::Transparency(ObjType objType, int XSize) : type(objType)
     absoluteOpaque.resize(WindowXSize);
     fourierImage.resize(WindowXSize);
     image.create(WindowXSize, WindowYSize, sf::Color::Black);
+    imagePreview.create(WindowXSize, WindowYSize, sf::Color::Black);
 
     Update(XSize);
 }
@@ -43,6 +53,7 @@ Transparency::Transparency(dataT2D &field, int XSize, int YSize)
 Transparency::Transparency(const Transparency &object)
 {
     Init(object);
+    createPreview({0, 0}, PREVIEW_PIXEL_SIZE);
 }
 
 void Transparency::Init(const Transparency &object)
@@ -68,6 +79,16 @@ void Transparency::Init(const Transparency &object)
     texture.update(image);
 
     sprite.setTexture(texture, true); // don't forget to reset sprite's rect!!
+
+
+    ///Set everything for preview
+    imagePreview.create(WindowXSize, WindowYSize, sf::Color::Black);
+    imagePreview.copy(object.imagePreview, 0, 0, rect, true);
+    texturePreview.create(WindowXSize, WindowYSize);
+    texturePreview.update(imagePreview);
+    spritePreview.setTexture(texturePreview, true);
+
+    createPreview({0, 0}, PREVIEW_PIXEL_SIZE);
 }
 
 void Transparency::Update(int XSize)
@@ -118,13 +139,22 @@ void Transparency::Update(int XSize)
         }
     }
 
-    setRelativeOpaque(nullptr);
+    setRelativeOpaque();
 
     CreateFourierImage();
 
     texture.create(WindowXSize, WindowYSize);
     texture.loadFromImage(image);
     sprite.setTexture(texture);
+
+    texturePreview.create(WindowXSize, WindowYSize);
+
+    createPreview({0, 0}, PREVIEW_PIXEL_SIZE);
+
+    texturePreview.loadFromImage(imagePreview);
+    spritePreview.setTexture(texturePreview, true);
+
+
 }
 
 void Transparency::CopyOpaqueFourier()
@@ -137,8 +167,7 @@ void Transparency::CopyOpaqueFourier()
     }
 }
 
-void Transparency::OpaqueImage()
-{
+void Transparency::relativeOpaqueImage() {
     if ((image.getSize().x != WindowXSize) or (image.getSize().y != WindowYSize))
         image.create(WindowXSize, WindowYSize, sf::Color::Black);
 
@@ -153,6 +182,26 @@ void Transparency::OpaqueImage()
     texture.create(WindowXSize, WindowYSize);
     texture.update(image);
     sprite.setTexture(texture, true);
+}
+
+void Transparency::createPreview(sf::Vector2i position, int pixelSize)
+{
+    if ((imagePreview.getSize().x != WindowXSize) or (imagePreview.getSize().y != WindowYSize))
+        imagePreview.create(WindowXSize, WindowYSize, sf::Color::Black);
+
+    for (int x = 0; x < WindowXSize; x++)
+    {
+        for (int y = 0; y < WindowYSize; y++)
+        {
+            imagePreview.setPixel(x, y, sf::Color(relativeOpaque[x][y] * 255, relativeOpaque[x][y] * 255, relativeOpaque[x][y] * 255));
+        }
+    }
+
+    //texturePreview.create(WindowXSize, WindowYSize);
+    texturePreview.update(imagePreview);
+    spritePreview.setTexture(texturePreview, true);
+    spritePreview.setPosition(position.x, position.y);
+    spritePreview.setScale(pixelSize/512.f, pixelSize/512.f);
 }
 
 void Transparency::CreateFourierImage()
@@ -236,7 +285,7 @@ void Transparency::FourierNormalize()
 void Transparency::UpdateSize(int size)
 {
     Update(size);
-//    OpaqueImage();
+//    relativeOpaqueImage();
     CreateImage(1, 500E-9, 10E-6);
 }
 
