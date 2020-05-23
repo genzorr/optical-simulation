@@ -19,15 +19,18 @@ public:
 
     void Init(const Transparency &object);
     void Update(int size);
+
     void CopyOpaqueFourier();
     void setRelativeOpaque(const Transparency *object = nullptr);
     void relativeOpaqueImage();
     void createPreview(sf::Vector2i position = {0, 0}, int pixelSize = PREVIEW_PIXEL_SIZE);   /// Called on update, but might be manually called for specific purposes
-    void CreateFourierImage();
-    void CreateInverseFourierImage();
-    void ApplyFourierImage();
-    void CreateImage(dataT z, dataT lambda, dataT scale);
+
     void FourierNormalize();
+    void FourierTranslateNormalize();
+    void CountFourierImage();
+    void CountInverseFourierImage();
+    void CreateFourierImage();
+    void CreateImage(dataT z, dataT lambda, dataT scale);
 
 public slots:
     void UpdateSize(int size);

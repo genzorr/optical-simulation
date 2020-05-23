@@ -36,8 +36,8 @@ void ImageCanvas::onInit()
 
     Transparency square(SQUARE, 64);
 //    square.CreateImage(1, lambda, 10E-6);
+//    square.CountFourierImage();
 //    square.CreateFourierImage();
-//    square.ApplyFourierImage();
 //    objHolder.push_back(square);
 }
 

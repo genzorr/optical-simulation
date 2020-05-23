@@ -17,7 +17,7 @@ Transparency::Transparency() : type(NO)
         std::fill(fourierImage[i].begin(), fourierImage[i].end(), complex(1, 0));
     }
 
-    CreateFourierImage();
+    CountFourierImage();
 
     image.create(WindowXSize, WindowYSize, sf::Color::White);
     texture.create(WindowXSize, WindowYSize);
@@ -141,7 +141,7 @@ void Transparency::Update(int XSize)
 
     setRelativeOpaque();
 
-    CreateFourierImage();
+    CountFourierImage();
 
     texture.create(WindowXSize, WindowYSize);
     texture.loadFromImage(image);
@@ -204,22 +204,23 @@ void Transparency::createPreview(sf::Vector2i position, int pixelSize)
     spritePreview.setScale(pixelSize/512.f, pixelSize/512.f);
 }
 
-void Transparency::CreateFourierImage()
+void Transparency::CountFourierImage()
 {
     CopyOpaqueFourier();
     FFT2D(fourierImage, WindowXSize, WindowYSize, 1);
+    FourierTranslateNormalize();
 }
 
-void Transparency::CreateInverseFourierImage()
+void Transparency::CountInverseFourierImage()
 {
     FFT2D(fourierImage, WindowXSize, WindowYSize, -1);
+    FourierNormalize();
+//    FourierTranslateNormalize();
 }
 
-void Transparency::ApplyFourierImage()
+void Transparency::FourierTranslateNormalize()
 {
-    if ((image.getSize().x != WindowXSize) or (image.getSize().y != WindowYSize))
-        image.create(WindowXSize, WindowYSize, sf::Color::Black);
-
+    dataT max = 0;
     dataT2Dc copy(WindowXSize);
     for (int x = 0; x < WindowXSize; x++)
     {
@@ -227,6 +228,9 @@ void Transparency::ApplyFourierImage()
         for (int y = 0; y < WindowYSize; y++)
         {
             copy[x][y] = fourierImage[x][y];
+            dataT value = std::abs(fourierImage[x][y]);
+            if (value > max)
+                max = value;
         }
     }
 
@@ -236,14 +240,25 @@ void Transparency::ApplyFourierImage()
         {
             int newx = (x < WindowXSize_2) ? (WindowXSize_2 - x - 1) : (WindowXSize + WindowXSize_2 - x - 1);
             int newy = (y < WindowYSize_2) ? (WindowYSize_2 - y - 1) : (WindowYSize + WindowYSize_2 - y - 1);
-//            std::swap(fourierImage[x][y], fourierImage[newx][newy]);
-            complex value = copy[x][y];
-//            fourierImage[x][y] = fourierImage[newx][newy];
-            fourierImage[newx][newy] = value;
+            fourierImage[x][y] = 255.0 * copy[newx][newy] / max;
+        }
+    }
 
+}
+
+void Transparency::CreateFourierImage()
+{
+    if ((image.getSize().x != WindowXSize) or (image.getSize().y != WindowYSize))
+        image.create(WindowXSize, WindowYSize, sf::Color::Black);
+
+    for (int x = 0; x < WindowXSize; x++)
+    {
+        for (int y = 0; y < WindowYSize; y++)
+        {
+            complex value = fourierImage[x][y];
             dataT intense = std::abs(value);
             int pixel = std::min(int(intense), 255);
-            image.setPixel(newx, newy, sf::Color((sf::Uint8)pixel, 0, 0));
+            image.setPixel(x, y, sf::Color((sf::Uint8)pixel, 0, 0));
         }
     }
 
@@ -254,7 +269,7 @@ void Transparency::ApplyFourierImage()
 
 void Transparency::CreateImage(dataT z, dataT lambda, dataT scale)
 {
-    CreateFourierImage();
+    CountFourierImage();
 
     dataT z_2 = z*z; // m^2
     dataT k_z_2 = z_2 * 2 * M_PI / lambda; // m
@@ -271,9 +286,8 @@ void Transparency::CreateImage(dataT z, dataT lambda, dataT scale)
         }
     }
 
-    CreateInverseFourierImage();
-    FourierNormalize();
-    ApplyFourierImage();
+    CountInverseFourierImage();
+    CreateFourierImage();
 }
 
 void Transparency::FourierNormalize()
@@ -293,7 +307,7 @@ void Transparency::FourierNormalize()
     {
         for (int y = 0; y < WindowYSize; y++)
         {
-            fourierImage[x][y]  = fourierImage[x][y] * complex(255,0) / max;
+            fourierImage[x][y] = 255.0 * fourierImage[x][y] / max;
         }
     }
 }
@@ -307,19 +321,17 @@ void Transparency::UpdateSize(int size)
 
 void Transparency::UpdateFourier()
 {
+    CountFourierImage();
     CreateFourierImage();
-    FourierNormalize();
-//    CreateInverseFourierImage();
-    ApplyFourierImage();
 }
 
 void Transparency::setRelativeOpaque(const Transparency *object) {
-    ///If it is 1st object
+    /// If it is 1st object
     if (object == nullptr) {
         for (size_t i = 0; i < absoluteOpaque.size(); i++)
             relativeOpaque.at(i) = absoluteOpaque.at(i);
     }
-    ///else take into account previous object
+    /// else take into account previous object
     else {
         for (size_t i = 0; i < object->relativeOpaque.size(); i++)
             relativeOpaque.at(i) = object->relativeOpaque.at(i);
