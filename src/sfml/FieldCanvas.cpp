@@ -7,7 +7,7 @@ void FieldCanvas::onInit()
 {
     QSFMLCanvas::onInit();
 
-    clear(sf::Color::Blue);
+    clear(sf::Color(55, 55, 55));
 
 
 }
@@ -16,9 +16,7 @@ void FieldCanvas::onUpdate()
 {
     QSFMLCanvas::onUpdate();
 
-    clear(sf::Color::Blue);
+    clear(sf::Color(55, 55, 55));
 
     draw(resultObject->spritePreview);
-
-    //draw(resultObject->sprite);
 }
