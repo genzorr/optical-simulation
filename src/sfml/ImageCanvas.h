@@ -5,9 +5,9 @@
 #include "QSFMLCanvas.h"
 #include "Transparency.h"
 
-/*
- * Subclass used to draw result image.
- */
+///
+/// Subclass used to draw result image.
+///
 class ImageCanvas : public QSFMLCanvas
 {
 Q_OBJECT
@@ -17,11 +17,11 @@ public:
     Transparency* getObject();
 
 private:
-    // First init of widget.
+    /// First init of widget.
     virtual void onInit();
-    // Before widget update.
+    /// Before widget update.
     virtual void onUpdate();
-    // Custom resizeEvent.
+    /// Custom resizeEvent.
     virtual void resizeEvent(QResizeEvent *event);
 
 public:

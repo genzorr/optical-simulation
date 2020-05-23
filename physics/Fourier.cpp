@@ -63,7 +63,7 @@ int FFT(int dir, int m, int twopm, complex *c)
     if (dir == 1)
     {
         for (i = 0; i < nn; i++)
-            c[i] /= (double)nn;
+            c[i] /= (dataT)nn;
     }
 
     return true;

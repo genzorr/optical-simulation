@@ -4,17 +4,17 @@
 #include <SFML/Graphics.hpp>
 #include "parameters.h"
 
-/*
- * Class used to store 2D array of object transparency.
- */
+///
+/// Class used to store 2D array of object transparency.
+///
 class Transparency : public QObject
 {
 Q_OBJECT
 public:
     Transparency();
-    Transparency(const Transparency& object);   // construct object from given
-    Transparency(ObjType objType, int XSize);           // EDGE, GAP or CIRCLE
-    Transparency(dataT2D& field, int XSize, int YSize); // random field XSize*YSize
+    Transparency(const Transparency& object);   /// construct object from given
+    Transparency(ObjType objType, int XSize);           /// EDGE, GAP or CIRCLE
+    Transparency(dataT2D& field, int XSize, int YSize); /// random field XSize*YSize
     virtual ~Transparency() {}
 
     void Init(const Transparency &object);
@@ -44,7 +44,7 @@ public:
     sf::Texture texture;
     sf::Sprite sprite;
 
-    ///Everything for preview
+    /// Everything for preview
     sf::Image imagePreview;
     sf::Texture texturePreview;
     sf::Sprite spritePreview;

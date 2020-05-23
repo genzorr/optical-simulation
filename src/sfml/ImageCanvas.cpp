@@ -5,6 +5,8 @@
 
 int WindowXSize = 512;
 int WindowYSize = 512;
+int WindowXSize_2 = 256;
+int WindowYSize_2 = 256;
 
 
 ImageCanvas::ImageCanvas(QWidget *parent) : QSFMLCanvas(parent), resultObject() {}

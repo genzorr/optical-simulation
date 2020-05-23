@@ -163,7 +163,7 @@ void Transparency::CopyOpaqueFourier()
     for (int x = 0; x < WindowXSize; x++)
     {
         for (int y = 0; y < WindowYSize; y++)
-            fourierImage[x][y] = complex(relativeOpaque[x][y], 0);
+            fourierImage[x][y] = complex(255 * relativeOpaque[x][y], 0);
     }
 }
 
@@ -197,10 +197,10 @@ void Transparency::createPreview(sf::Vector2i position, int pixelSize)
         }
     }
 
-    //texturePreview.create(WindowXSize, WindowYSize);
-    texturePreview.update(imagePreview);
+    texturePreview.create(WindowXSize, WindowYSize);
+    texturePreview.update(imagePreview, WindowXSize, WindowYSize);
     spritePreview.setTexture(texturePreview, true);
-    spritePreview.setPosition(position.x, position.y);
+//    spritePreview.setPosition(position.x, position.y);
     spritePreview.setScale(pixelSize/512.f, pixelSize/512.f);
 }
 
@@ -220,15 +220,30 @@ void Transparency::ApplyFourierImage()
     if ((image.getSize().x != WindowXSize) or (image.getSize().y != WindowYSize))
         image.create(WindowXSize, WindowYSize, sf::Color::Black);
 
+    dataT2Dc copy(WindowXSize);
+    for (int x = 0; x < WindowXSize; x++)
+    {
+        copy[x].resize(WindowYSize);
+        for (int y = 0; y < WindowYSize; y++)
+        {
+            copy[x][y] = fourierImage[x][y];
+        }
+    }
+
     for (int x = 0; x < WindowXSize; x++)
     {
         for (int y = 0; y < WindowYSize; y++)
         {
-            complex value = fourierImage[x][y];
-            dataT intense = value.real() * value.real() + value.imag() * value.imag();
-//            dataT intense = value.real();
-            int pixel = std::min(int(intense*255), 255);
-            image.setPixel(x, y, sf::Color((sf::Uint8)pixel, 0, 0)); //(sf::Uint8)((1-std::abs(fourierImage[x][y]))*255))
+            int newx = (x < WindowXSize_2) ? (WindowXSize_2 - x - 1) : (WindowXSize + WindowXSize_2 - x - 1);
+            int newy = (y < WindowYSize_2) ? (WindowYSize_2 - y - 1) : (WindowYSize + WindowYSize_2 - y - 1);
+//            std::swap(fourierImage[x][y], fourierImage[newx][newy]);
+            complex value = copy[x][y];
+//            fourierImage[x][y] = fourierImage[newx][newy];
+            fourierImage[newx][newy] = value;
+
+            dataT intense = std::abs(value);
+            int pixel = std::min(int(intense), 255);
+            image.setPixel(newx, newy, sf::Color((sf::Uint8)pixel, 0, 0));
         }
     }
 
@@ -257,6 +272,7 @@ void Transparency::CreateImage(dataT z, dataT lambda, dataT scale)
     }
 
     CreateInverseFourierImage();
+    FourierNormalize();
     ApplyFourierImage();
 }
 
@@ -277,7 +293,7 @@ void Transparency::FourierNormalize()
     {
         for (int y = 0; y < WindowYSize; y++)
         {
-            fourierImage[x][y] /= max;
+            fourierImage[x][y]  = fourierImage[x][y] * complex(255,0) / max;
         }
     }
 }
@@ -292,6 +308,8 @@ void Transparency::UpdateSize(int size)
 void Transparency::UpdateFourier()
 {
     CreateFourierImage();
+    FourierNormalize();
+//    CreateInverseFourierImage();
     ApplyFourierImage();
 }
 
