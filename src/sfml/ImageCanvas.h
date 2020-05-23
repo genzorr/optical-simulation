@@ -14,6 +14,7 @@ Q_OBJECT
 public:
     explicit ImageCanvas(QWidget* parent = nullptr);
     virtual ~ImageCanvas() override {}
+    Transparency* getObject();
 
 private:
     // First init of widget.

@@ -16,11 +16,12 @@ QSFMLCanvas::QSFMLCanvas(QWidget* parent, uint frameTime) :
 //    setFocusPolicy(Qt::StrongFocus);
 
     m_timer.setInterval(frameTime);
+
 }
 
 void QSFMLCanvas::onInit()
 {
-    //
+
 }
 
 void QSFMLCanvas::onUpdate()
@@ -68,7 +69,8 @@ void QSFMLCanvas::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
 
-    setSize(sf::Vector2u(size().width(), size().height())); // changes size of render zone
+    //Todo: something wrong with this, quick fix
+    setSize(sf::Vector2u(size().width(), size().width())); // changes size of render zone
     sf::FloatRect r(0, 0, WindowXSize, WindowYSize);   // changes size of render window
     sf::View v(r);
     setView(v);

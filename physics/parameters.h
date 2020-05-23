@@ -26,4 +26,6 @@ extern const int OBJECT_CNT;
 extern int WindowXSize;
 extern int WindowYSize;
 
+#define PREVIEW_PIXEL_SIZE 180
+
 #endif //OPTICAL_SIMULATION_PARAMETERS_H

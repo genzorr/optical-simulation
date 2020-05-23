@@ -38,6 +38,7 @@ private slots:
     // Used to repaint widget.
     void onTimeout();
 
+
 private:
     QTimer m_timer;         // used to repaint widget with %frameTime% interval
     bool   m_initialized;   // to be set on init

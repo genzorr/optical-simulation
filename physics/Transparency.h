@@ -20,7 +20,9 @@ public:
     void Init(const Transparency &object);
     void Update(int size);
     void CopyOpaqueFourier();
-    void OpaqueImage();
+    void setRelativeOpaque(const Transparency *object = nullptr);
+    void relativeOpaqueImage();
+    void createPreview(sf::Vector2i position = {0, 0}, int pixelSize = PREVIEW_PIXEL_SIZE);   /// Called on update, but might be manually called for specific purposes
     void CreateFourierImage();
     void CreateInverseFourierImage();
     void ApplyFourierImage();
@@ -32,12 +34,20 @@ public slots:
     void UpdateFourier();
 
 public:
+    double position;                /// Distance from light emitter
     ObjType type;
-    dataT2D opaque;
+    dataT2D absoluteOpaque;         /// Characteristic of the object itself  1 - transparent 0 - not transparent
+    dataT2D relativeOpaque;         /// Relative to falling light            1 - transparent 0 - not transparent
     dataT2Dc fourierImage;
+
     sf::Image image;
     sf::Texture texture;
     sf::Sprite sprite;
+
+    ///Everything for preview
+    sf::Image imagePreview;
+    sf::Texture texturePreview;
+    sf::Sprite spritePreview;
 };
 
 typedef std::vector<Transparency> ObjHolder;
