@@ -2,6 +2,8 @@
 #include "Transparency.h"
 #include "Fourier.h"
 #include <QDebug>
+#include "../util/waveRGB/waveRGB.h"
+
 
 Transparency::Transparency() : type(NO)
 {
@@ -258,7 +260,13 @@ void Transparency::CreateFourierImage()
             complex value = fourierImage[x][y];
             dataT intense = std::abs(value);
             int pixel = std::min(int(intense), 255);
-            image.setPixel(x, y, sf::Color((sf::Uint8)pixel, 0, 0));
+            // TODO: refactor this, maybe move calculating rgbColor to Init or smth.
+            sf::Color pixelColor = WaveRGB::Calc(500);
+            pixelColor.r *= pixel / 255.f;
+            pixelColor.g *= pixel / 255.f;
+            pixelColor.b *= pixel / 255.f;
+            //
+            image.setPixel(x, y, pixelColor);
         }
     }
 
@@ -275,6 +283,7 @@ void Transparency::CreateImage(dataT z, dataT lambda, dataT scale)
     dataT k_z_2 = z_2 * 2 * M_PI / lambda; // m
     dataT scale_2 = scale*scale;
 
+    /// Iterate through all x y and apply z offset like in lectures
     for (int x = -WindowXSize/2; x < WindowXSize/2; x++)
     {
         dataT x_2 = x * x * scale_2;
