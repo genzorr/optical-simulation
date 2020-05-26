@@ -325,7 +325,7 @@ void Transparency::UpdateSize(int size)
 {
     Update(size);
 //    relativeOpaqueImage();
-    CreateImage(1, 500E-9, 10E-6);
+    CreateImage(10, 500E-9, 10E-6);
 }
 
 void Transparency::UpdateFourier()

@@ -31,7 +31,7 @@ file(GLOB SOURCES
         interface/*.*
         physics/*.*
         )
-add_executable(optical_simulation ${SOURCES} util/waveRGB/waveRGB.cpp util/waveRGB/waveRGB.h)
+add_executable(optical_simulation ${SOURCES} util/waveRGB/waveRGB.cpp util/waveRGB/waveRGB.h physics/RectObstacle.cpp physics/RectObstacle.h)
 
 target_link_libraries(optical_simulation Qt5::Core Qt5::Widgets Qt5::Quick)
 #target_link_libraries(optical_simulation Qt5::Core Qt5::Widgets)
