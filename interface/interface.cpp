@@ -23,8 +23,8 @@ MainWindow::MainWindow()
     ui.hl12->addWidget(imageCanvas);
 
     //FIXME: 1st line for 1920x1080, 2nd for ultrawide
-    ui.hl12->setContentsMargins(125, 98, 124, 98);
-//    ui.hl12->setContentsMargins(251, 96, 251, 96);
+//    ui.hl12->setContentsMargins(125, 98, 124, 98);
+    ui.hl12->setContentsMargins(251, 96, 251, 96);
 
     /// Preview of scene
     FieldCanvas* fieldCanvas = new FieldCanvas(ui.fieldFrame);

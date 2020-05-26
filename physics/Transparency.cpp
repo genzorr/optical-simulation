@@ -275,14 +275,14 @@ void Transparency::CreateImage(dataT z, dataT lambda, dataT scale)
     dataT k_z_2 = z_2 * 2 * M_PI / lambda; // m
     dataT scale_2 = scale*scale;
 
-    for (int x = 0; x < WindowXSize; x++)
+    for (int x = -WindowXSize/2; x < WindowXSize/2; x++)
     {
         dataT x_2 = x * x * scale_2;
-        for (int y = 0; y < WindowYSize; y++)
+        for (int y = -WindowXSize/2; y < WindowYSize/2; y++)
         {
-            dataT value = k_z_2 / sqrt(x_2 + y*y*scale_2 + z_2);
-            complex exp(cos(value), -sin(value));
-            fourierImage[x][y] *= exp;
+            dataT value = -k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
+            complex exp(cos(value), sin(value));
+            fourierImage[x + WindowXSize/2][y + WindowXSize/2] *= exp;
         }
     }
 
