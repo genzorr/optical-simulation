@@ -34,7 +34,7 @@ void RectObstacle::Update(int sizeX, int sizeY) {
 
     texturePreview.create(WindowXSize, WindowYSize);
 
-    createPreview({0, 0}, PREVIEW_PIXEL_SIZE);
+    createPreview();
 
     texturePreview.loadFromImage(imagePreview);
     spritePreview.setTexture(texturePreview, true);

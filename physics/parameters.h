@@ -28,6 +28,4 @@ extern int WindowYSize;
 extern int WindowXSize_2;
 extern int WindowYSize_2;
 
-#define PREVIEW_PIXEL_SIZE 180
-
 #endif //OPTICAL_SIMULATION_PARAMETERS_H

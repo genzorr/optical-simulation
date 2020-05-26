@@ -7,6 +7,9 @@
 
 Transparency::Transparency() : type(NO)
 {
+    /// Init pixel color.
+    pixelColor = WaveRGB::Calc(DEFAULT_WAVELEN);
+
     relativeOpaque.resize(WindowXSize);
     absoluteOpaque.resize(WindowXSize);
     fourierImage.resize(WindowXSize);
@@ -26,14 +29,13 @@ Transparency::Transparency() : type(NO)
     texture.loadFromImage(image);
     sprite.setTexture(texture);
 
-    ///Init everything for preview
+    /// Init everything for preview.
     imagePreview.create(WindowXSize, WindowYSize, sf::Color::White);
     texturePreview.create(WindowXSize, WindowYSize);
     texturePreview.loadFromImage(imagePreview);
     spritePreview.setTexture(texturePreview);
 
-    createPreview({100, 100}, PREVIEW_PIXEL_SIZE);
-
+    createPreview();
 }
 
 Transparency::Transparency(ObjType objType, int XSize) : type(objType)
@@ -49,18 +51,18 @@ Transparency::Transparency(ObjType objType, int XSize) : type(objType)
 
 Transparency::Transparency(dataT2D &field, int XSize, int YSize)
 {
-
+    pixelColor = WaveRGB::Calc(DEFAULT_WAVELEN);
 }
 
 Transparency::Transparency(const Transparency &object)
 {
     Init(object);
-    createPreview({0, 0}, PREVIEW_PIXEL_SIZE);
 }
 
 void Transparency::Init(const Transparency &object)
 {
     type = object.type;
+    pixelColor = WaveRGB::Calc(DEFAULT_WAVELEN);
 
     relativeOpaque.resize(0);
     absoluteOpaque.resize(0);
@@ -80,8 +82,7 @@ void Transparency::Init(const Transparency &object)
     texture.create(WindowXSize, WindowYSize);
     texture.update(image);
 
-    sprite.setTexture(texture, true); // don't forget to reset sprite's rect!!
-
+    sprite.setTexture(texture, true); /// don't forget to reset sprite's rect!!
 
     ///Set everything for preview
     imagePreview.create(WindowXSize, WindowYSize, sf::Color::Black);
@@ -90,30 +91,32 @@ void Transparency::Init(const Transparency &object)
     texturePreview.update(imagePreview);
     spritePreview.setTexture(texturePreview, true);
 
-    createPreview({0, 0}, PREVIEW_PIXEL_SIZE);
+    createPreview();
 }
 
 void Transparency::Update(int XSize)
 {
     for (int i = 0; i < WindowXSize; i++)
     {
-        absoluteOpaque[i].resize(WindowYSize);
-        relativeOpaque[i].resize(WindowYSize);
+        absoluteOpaque[i].resize(WindowXSize);
+        relativeOpaque[i].resize(WindowXSize);
         std::fill(absoluteOpaque[i].begin(), absoluteOpaque[i].end(), 0);
         std::fill(relativeOpaque[i].begin(), relativeOpaque[i].end(), 0);
 
-        fourierImage[i].resize(WindowYSize);
+        fourierImage[i].resize(WindowXSize);
         std::fill(fourierImage[i].begin(), fourierImage[i].end(), complex(0, 0));
     }
 
+    pixelColor = WaveRGB::Calc(DEFAULT_WAVELEN);
+
     if (type == EDGE)
     {
-        int edgeXCoordinate = (WindowXSize / 2) - XSize;
+        int edgeXCoordinate = WindowXSize_2 - XSize;
         for (int x = edgeXCoordinate; x < WindowXSize; x++)
         {
             std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0);
             for (int y = 0; y < WindowYSize; y++)
-                image.setPixel(x, y, sf::Color(255, 0, 0));
+                image.setPixel(x, y, pixelColor);
         }
     }
     else if (type == GAP)
@@ -123,7 +126,7 @@ void Transparency::Update(int XSize)
         {
             std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0);
             for (int y = 0; y < WindowYSize; y++)
-                image.setPixel(x, y, sf::Color(255, 0, 0));
+                image.setPixel(x, y, pixelColor);
         }
     }
     else if (type == SQUARE)
@@ -136,7 +139,7 @@ void Transparency::Update(int XSize)
             for (int y = top; y < (WindowYSize - top); y++)
             {
                 absoluteOpaque[x][y] = 1;
-                image.setPixel(x, y, sf::Color(255, 0, 0));
+                image.setPixel(x, y, pixelColor);
             }
         }
     }
@@ -150,13 +153,9 @@ void Transparency::Update(int XSize)
     sprite.setTexture(texture);
 
     texturePreview.create(WindowXSize, WindowYSize);
-
-    createPreview({0, 0}, PREVIEW_PIXEL_SIZE);
-
+    createPreview();
     texturePreview.loadFromImage(imagePreview);
     spritePreview.setTexture(texturePreview, true);
-
-
 }
 
 void Transparency::CopyOpaqueFourier()
@@ -177,7 +176,10 @@ void Transparency::relativeOpaqueImage() {
     {
         for (int y = 0; y < WindowYSize; y++)
         {
-            image.setPixel(x, y, sf::Color((int)(relativeOpaque[x][y] * 255), 0, 0));
+            pixelColor.r = (int)(pixelColor.r * relativeOpaque[x][y]);
+            pixelColor.g = (int)(pixelColor.g * relativeOpaque[x][y]);
+            pixelColor.b = (int)(pixelColor.b * relativeOpaque[x][y]);
+            imagePreview.setPixel(x, y, pixelColor);
         }
     }
 
@@ -186,7 +188,7 @@ void Transparency::relativeOpaqueImage() {
     sprite.setTexture(texture, true);
 }
 
-void Transparency::createPreview(sf::Vector2i position, int pixelSize)
+void Transparency::createPreview()
 {
     if ((imagePreview.getSize().x != WindowXSize) or (imagePreview.getSize().y != WindowYSize))
         imagePreview.create(WindowXSize, WindowYSize, sf::Color::Black);
@@ -195,15 +197,16 @@ void Transparency::createPreview(sf::Vector2i position, int pixelSize)
     {
         for (int y = 0; y < WindowYSize; y++)
         {
-            imagePreview.setPixel(x, y, sf::Color(relativeOpaque[x][y] * 255, relativeOpaque[x][y] * 255, relativeOpaque[x][y] * 255));
+            pixelColor.r = (int)(pixelColor.r * relativeOpaque[x][y]);
+            pixelColor.g = (int)(pixelColor.g * relativeOpaque[x][y]);
+            pixelColor.b = (int)(pixelColor.b * relativeOpaque[x][y]);
+            imagePreview.setPixel(x, y, pixelColor);
         }
     }
 
     texturePreview.create(WindowXSize, WindowYSize);
     texturePreview.update(imagePreview, WindowXSize, WindowYSize);
     spritePreview.setTexture(texturePreview, true);
-//    spritePreview.setPosition(position.x, position.y);
-    spritePreview.setScale(pixelSize/512.f, pixelSize/512.f);
 }
 
 void Transparency::CountFourierImage()
@@ -217,7 +220,6 @@ void Transparency::CountInverseFourierImage()
 {
     FFT2D(fourierImage, WindowXSize, WindowYSize, -1);
     FourierNormalize();
-//    FourierTranslateNormalize();
 }
 
 void Transparency::FourierTranslateNormalize()
@@ -259,13 +261,12 @@ void Transparency::CreateFourierImage()
         {
             complex value = fourierImage[x][y];
             dataT intense = std::abs(value);
-            int pixel = std::min(int(intense), 255);
-            // TODO: refactor this, maybe move calculating rgbColor to Init or smth.
-            sf::Color pixelColor = WaveRGB::Calc(500);
-            pixelColor.r *= pixel / 255.f;
-            pixelColor.g *= pixel / 255.f;
-            pixelColor.b *= pixel / 255.f;
-            //
+
+            dataT pixel = std::min(int(intense), 255) / 255.f;
+            pixelColor.r = (int)(pixelColor.r * pixel);
+            pixelColor.g = (int)(pixelColor.g * pixel);
+            pixelColor.b = (int)(pixelColor.b * pixel);
+
             image.setPixel(x, y, pixelColor);
         }
     }
@@ -284,14 +285,14 @@ void Transparency::CreateImage(dataT z, dataT lambda, dataT scale)
     dataT scale_2 = scale*scale;
 
     /// Iterate through all x y and apply z offset like in lectures
-    for (int x = -WindowXSize/2; x < WindowXSize/2; x++)
+    for (int x = -WindowXSize_2; x < WindowXSize_2; x++)
     {
         dataT x_2 = x * x * scale_2;
-        for (int y = -WindowXSize/2; y < WindowYSize/2; y++)
+        for (int y = -WindowYSize_2; y < WindowYSize_2; y++)
         {
             dataT value = -k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
             complex exp(cos(value), sin(value));
-            fourierImage[x + WindowXSize/2][y + WindowXSize/2] *= exp;
+            fourierImage[x + WindowXSize_2][y + WindowYSize_2] *= exp;
         }
     }
 

@@ -16,29 +16,8 @@ void ImageCanvas::onInit()
     QSFMLCanvas::onInit();
 
     // Fill in resultObject properly.
-    Transparency cleanObj = Transparency(SQUARE, 2);
+    Transparency cleanObj = Transparency(SQUARE, 20);
     resultObject.Init(cleanObj);
-
-    // Fill in object holder.
-    objHolder.resize(1);
-    objHolder.clear();
-
-    dataT lambda = 500E-9;
-
-    Transparency edge(EDGE, 30);
-    edge.CreateImage(0.3, lambda, 10E-6);
-//    objHolder.push_back(edge);
-
-    Transparency gap(GAP, 50);
-    gap.CreateImage(1, lambda, 10E-6);
-//    objHolder.push_back(gap);
-
-
-    Transparency square(SQUARE, 64);
-//    square.CreateImage(1, lambda, 10E-6);
-//    square.CountFourierImage();
-//    square.CreateFourierImage();
-//    objHolder.push_back(square);
 }
 
 void ImageCanvas::onUpdate()

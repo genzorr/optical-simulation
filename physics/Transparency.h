@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include "parameters.h"
 
+#define DEFAULT_WAVELEN 500
+
 ///
 /// Class used to store 2D array of object transparency.
 ///
@@ -23,7 +25,7 @@ public:
     void CopyOpaqueFourier();
     void setRelativeOpaque(const Transparency *object = nullptr);
     void relativeOpaqueImage();
-    void createPreview(sf::Vector2i position = {0, 0}, int pixelSize = PREVIEW_PIXEL_SIZE);   /// Called on update, but might be manually called for specific purposes
+    void createPreview();   /// Called on update, but might be manually called for specific purposes
 
     void FourierNormalize();
     void FourierTranslateNormalize();
@@ -42,6 +44,8 @@ public:
     dataT2D absoluteOpaque;         /// Characteristic of the object itself  1 - transparent 0 - not transparent
     dataT2D relativeOpaque;         /// Relative to falling light            1 - transparent 0 - not transparent
     dataT2Dc fourierImage;
+
+    sf::Color pixelColor;
 
     sf::Image image;
     sf::Texture texture;

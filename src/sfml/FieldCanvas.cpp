@@ -8,8 +8,6 @@ void FieldCanvas::onInit()
     QSFMLCanvas::onInit();
 
     clear(sf::Color(55, 55, 55));
-
-
 }
 
 void FieldCanvas::onUpdate()

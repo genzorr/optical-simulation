@@ -18,18 +18,22 @@ MainWindow::MainWindow()
     Ui::MainWindow ui;
     ui.setupUi(this);
 
+    /// Preview of scene
+    FieldCanvas* fieldCanvas = new FieldCanvas(ui.fieldFrame);
+    ui.hl11->addWidget(fieldCanvas);
+
     /// Resulting image
     ImageCanvas* imageCanvas = new ImageCanvas(ui.imageFrame);
     ui.hl12->addWidget(imageCanvas);
 
-    //FIXME: 1st line for 1920x1080, 2nd for ultrawide
-//    ui.hl12->setContentsMargins(125, 98, 124, 98);
-    ui.hl12->setContentsMargins(251, 96, 251, 96);
-
-    /// Preview of scene
-    FieldCanvas* fieldCanvas = new FieldCanvas(ui.fieldFrame);
+    /// Get object
     fieldCanvas->setObject(imageCanvas->getObject());
-    ui.hl11->addWidget(fieldCanvas);
+
+    //FIXME: 1st line for 1920x1080, 2nd for ultrawide
+    ui.hl11->setContentsMargins(60, 98, 60, 98);
+    ui.hl12->setContentsMargins(60, 98, 60, 98);
+    ui.hl13->setContentsMargins(60, 98, 60, 98);
+//    ui.hl12->setContentsMargins(251, 96, 251, 96);
 
     connect(ui.sizeBox, QOverload<int>::of(&QSpinBox::valueChanged), &(imageCanvas->resultObject), &Transparency::UpdateSize);
     connect(ui.fourierButton, &QPushButton::pressed, &(imageCanvas->resultObject), &Transparency::UpdateFourier);

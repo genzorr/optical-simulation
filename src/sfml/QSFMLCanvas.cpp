@@ -16,7 +16,6 @@ QSFMLCanvas::QSFMLCanvas(QWidget* parent, uint frameTime) :
 //    setFocusPolicy(Qt::StrongFocus);
 
     m_timer.setInterval(frameTime);
-
 }
 
 void QSFMLCanvas::onInit()
@@ -31,22 +30,22 @@ void QSFMLCanvas::onUpdate()
 
 QPaintEngine* QSFMLCanvas::paintEngine() const
 {
-    // Return NULL here to block Qt to paint something by itself!!
+    /// Return NULL here to block Qt to paint something by itself!!
     return nullptr;
 }
 
 void QSFMLCanvas::showEvent(QShowEvent*)
 {
-    // First widget init.
+    /// First widget init.
     if (!m_initialized)
     {
-        // Create window and pass window ID where to paint.
+        /// Create window and pass window ID where to paint.
         RenderWindow::create(winId());
 
-        // Default widget init.
+        /// Default widget init.
         onInit();
 
-        // Update timer setup.
+        /// Update timer setup.
         connect(&m_timer, &QTimer::timeout, this, &QSFMLCanvas::onTimeout);
         m_timer.start();
 
@@ -56,12 +55,12 @@ void QSFMLCanvas::showEvent(QShowEvent*)
 
 void QSFMLCanvas::paintEvent(QPaintEvent*)
 {
-    // Invoked when this->repaint() or this->update() used.
+    /// Invoked when this->repaint() or this->update() used.
 
-    // Do some specific stuff.
+    /// Do some specific stuff.
     onUpdate();
 
-    // Display repainted window.
+    /// Display repainted window.
     display();
 }
 
@@ -69,9 +68,8 @@ void QSFMLCanvas::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
 
-    //Todo: something wrong with this, quick fix
-    setSize(sf::Vector2u(size().width(), size().width())); // changes size of render zone
-    sf::FloatRect r(0, 0, WindowXSize, WindowYSize);   // changes size of render window
+    setSize(sf::Vector2u(size().width(), size().height())); /// changes size of render zone
+    sf::FloatRect r(0, 0, WindowXSize, WindowYSize);   /// changes size of render window
     sf::View v(r);
     setView(v);
 
