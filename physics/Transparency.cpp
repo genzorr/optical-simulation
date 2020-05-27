@@ -1,7 +1,7 @@
 #include <algorithm>
+#include <QDebug>
 #include "Transparency.h"
 #include "Fourier.h"
-#include <QDebug>
 #include "../util/waveRGB/waveRGB.h"
 
 
@@ -176,10 +176,11 @@ void Transparency::relativeOpaqueImage() {
     {
         for (int y = 0; y < WindowYSize; y++)
         {
-            pixelColor.r = (int)(pixelColor.r * relativeOpaque[x][y]);
-            pixelColor.g = (int)(pixelColor.g * relativeOpaque[x][y]);
-            pixelColor.b = (int)(pixelColor.b * relativeOpaque[x][y]);
-            imagePreview.setPixel(x, y, pixelColor);
+            sf::Color pixel = pixelColor;
+            pixel.r = (sf::Uint8)(pixel.r * relativeOpaque[x][y]);
+            pixel.g = (sf::Uint8)(pixel.g * relativeOpaque[x][y]);
+            pixel.b = (sf::Uint8)(pixel.b * relativeOpaque[x][y]);
+            imagePreview.setPixel(x, y, pixel);
         }
     }
 
@@ -197,10 +198,11 @@ void Transparency::createPreview()
     {
         for (int y = 0; y < WindowYSize; y++)
         {
-            pixelColor.r = (int)(pixelColor.r * relativeOpaque[x][y]);
-            pixelColor.g = (int)(pixelColor.g * relativeOpaque[x][y]);
-            pixelColor.b = (int)(pixelColor.b * relativeOpaque[x][y]);
-            imagePreview.setPixel(x, y, pixelColor);
+            sf::Color pixel = pixelColor;
+            pixel.r = (sf::Uint8)(pixel.r * relativeOpaque[x][y]);
+            pixel.g = (sf::Uint8)(pixel.g * relativeOpaque[x][y]);
+            pixel.b = (sf::Uint8)(pixel.b * relativeOpaque[x][y]);
+            imagePreview.setPixel(x, y, pixel);
         }
     }
 
@@ -262,12 +264,13 @@ void Transparency::CreateFourierImage()
             complex value = fourierImage[x][y];
             dataT intense = std::abs(value);
 
-            dataT pixel = std::min(int(intense), 255) / 255.f;
-            pixelColor.r = (int)(pixelColor.r * pixel);
-            pixelColor.g = (int)(pixelColor.g * pixel);
-            pixelColor.b = (int)(pixelColor.b * pixel);
+            dataT pixelValue = (dataT)std::min(int(intense), 255) / 255.f;
+            sf::Color pixel = pixelColor;
+            pixel.r = (sf::Uint8)(pixel.r * pixelValue);
+            pixel.g = (sf::Uint8)(pixel.g * pixelValue);
+            pixel.b = (sf::Uint8)(pixel.b * pixelValue);
 
-            image.setPixel(x, y, pixelColor);
+            image.setPixel(x, y, pixel);
         }
     }
 
@@ -284,7 +287,7 @@ void Transparency::CreateImage(dataT z, dataT lambda, dataT scale)
     dataT k_z_2 = z_2 * 2 * M_PI / lambda; // m
     dataT scale_2 = scale*scale;
 
-    /// Iterate through all x y and apply z offset like in lectures
+    /// Iterate through all x y and apply z offset like complex exponent.
     for (int x = -WindowXSize_2; x < WindowXSize_2; x++)
     {
         dataT x_2 = x * x * scale_2;

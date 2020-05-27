@@ -55,6 +55,11 @@ public:
     sf::Image imagePreview;
     sf::Texture texturePreview;
     sf::Sprite spritePreview;
+
+    /// Fourier image
+    sf::Image imageFourier;
+    sf::Texture textureFourier;
+    sf::Sprite spriteFourier;
 };
 
 typedef std::vector<Transparency> ObjHolder;
