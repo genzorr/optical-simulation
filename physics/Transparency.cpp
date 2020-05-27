@@ -36,6 +36,8 @@ Transparency::Transparency() : type(NO)
     spritePreview.setTexture(texturePreview);
 
     createPreview();
+    UpdateSize(2);
+
 }
 
 Transparency::Transparency(ObjType objType, int XSize) : type(objType)
@@ -46,7 +48,7 @@ Transparency::Transparency(ObjType objType, int XSize) : type(objType)
     image.create(WindowXSize, WindowYSize, sf::Color::Black);
     imagePreview.create(WindowXSize, WindowYSize, sf::Color::Black);
 
-    Update(XSize);
+    UpdateSize(XSize);
 }
 
 Transparency::Transparency(dataT2D &field, int XSize, int YSize)
@@ -92,6 +94,7 @@ void Transparency::Init(const Transparency &object)
     spritePreview.setTexture(texturePreview, true);
 
     createPreview();
+    UpdateSize(2);
 }
 
 void Transparency::Update(int XSize)
@@ -198,7 +201,8 @@ void Transparency::createPreview()
     {
         for (int y = 0; y < WindowYSize; y++)
         {
-            sf::Color pixel = pixelColor;
+            //sf::Color pixel = pixelColor;
+            sf::Color pixel = sf::Color::White;
             pixel.r = (sf::Uint8)(pixel.r * relativeOpaque[x][y]);
             pixel.g = (sf::Uint8)(pixel.g * relativeOpaque[x][y]);
             pixel.b = (sf::Uint8)(pixel.b * relativeOpaque[x][y]);
