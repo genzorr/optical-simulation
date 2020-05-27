@@ -2,8 +2,8 @@
 #define OPTICAL_SIMULATION_FIELDCANVAS_H
 
 #include "QSFMLCanvas.h"
+#include "Transparency.h"
 
-class Transparency;
 
 ///
 /// Subclass used to draw optical system field.

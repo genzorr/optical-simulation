@@ -35,7 +35,14 @@ Transparency::Transparency() : type(NO)
     texturePreview.loadFromImage(imagePreview);
     spritePreview.setTexture(texturePreview);
 
+    imageFourier.create(WindowXSize, WindowYSize, sf::Color::White);
+    textureFourier.create(WindowXSize, WindowYSize);
+    textureFourier.loadFromImage(imageFourier);
+    spriteFourier.setTexture(textureFourier);
+
     createPreview();
+    UpdateSize(2);
+
 }
 
 Transparency::Transparency(ObjType objType, int XSize) : type(objType)
@@ -45,8 +52,9 @@ Transparency::Transparency(ObjType objType, int XSize) : type(objType)
     fourierImage.resize(WindowXSize);
     image.create(WindowXSize, WindowYSize, sf::Color::Black);
     imagePreview.create(WindowXSize, WindowYSize, sf::Color::Black);
+    imageFourier.create(WindowXSize, WindowYSize, sf::Color::Black);
 
-    Update(XSize);
+    UpdateSize(XSize);
 }
 
 Transparency::Transparency(dataT2D &field, int XSize, int YSize)
@@ -75,23 +83,34 @@ void Transparency::Init(const Transparency &object)
     for (size_t i = 0; i < object.fourierImage.size(); i++)
         fourierImage.push_back(object.fourierImage[i]);
 
+    /// Image.
     const sf::Rect rect(0,0, WindowXSize, WindowYSize);
     image.create(WindowXSize, WindowYSize, sf::Color::Black);
     image.copy(object.image, 0, 0, rect, true);
 
     texture.create(WindowXSize, WindowYSize);
     texture.update(image);
-
     sprite.setTexture(texture, true); /// don't forget to reset sprite's rect!!
 
-    ///Set everything for preview
+    /// Preview.
     imagePreview.create(WindowXSize, WindowYSize, sf::Color::Black);
     imagePreview.copy(object.imagePreview, 0, 0, rect, true);
+
     texturePreview.create(WindowXSize, WindowYSize);
     texturePreview.update(imagePreview);
     spritePreview.setTexture(texturePreview, true);
 
+    /// Fourier image.
+    imageFourier.create(WindowXSize, WindowYSize, sf::Color::Black);
+    imageFourier.copy(object.imageFourier, 0, 0, rect, true);
+
+    textureFourier.create(WindowXSize, WindowYSize);
+    textureFourier.update(imageFourier);
+    spriteFourier.setTexture(textureFourier, true);
+
+
     createPreview();
+    UpdateSize(2);
 }
 
 void Transparency::Update(int XSize)
@@ -146,8 +165,6 @@ void Transparency::Update(int XSize)
 
     setRelativeOpaque();
 
-    CountFourierImage();
-
     texture.create(WindowXSize, WindowYSize);
     texture.loadFromImage(image);
     sprite.setTexture(texture);
@@ -156,6 +173,12 @@ void Transparency::Update(int XSize)
     createPreview();
     texturePreview.loadFromImage(imagePreview);
     spritePreview.setTexture(texturePreview, true);
+
+    CountFourierImage();
+    textureFourier.create(WindowXSize, WindowYSize);
+    CreateFourierImage();
+    textureFourier.loadFromImage(imageFourier);
+    spriteFourier.setTexture(textureFourier, true);
 }
 
 void Transparency::CopyOpaqueFourier()
@@ -198,7 +221,8 @@ void Transparency::createPreview()
     {
         for (int y = 0; y < WindowYSize; y++)
         {
-            sf::Color pixel = pixelColor;
+            //sf::Color pixel = pixelColor;
+            sf::Color pixel = sf::Color::White;
             pixel.r = (sf::Uint8)(pixel.r * relativeOpaque[x][y]);
             pixel.g = (sf::Uint8)(pixel.g * relativeOpaque[x][y]);
             pixel.b = (sf::Uint8)(pixel.b * relativeOpaque[x][y]);
@@ -252,10 +276,12 @@ void Transparency::FourierTranslateNormalize()
 
 }
 
+
+// TODO: FIX THAT
 void Transparency::CreateFourierImage()
 {
-    if ((image.getSize().x != WindowXSize) or (image.getSize().y != WindowYSize))
-        image.create(WindowXSize, WindowYSize, sf::Color::Black);
+    if ((imageFourier.getSize().x != WindowXSize) or (imageFourier.getSize().y != WindowYSize))
+        imageFourier.create(WindowXSize, WindowYSize, sf::Color::Black);
 
     for (int x = 0; x < WindowXSize; x++)
     {
@@ -270,13 +296,13 @@ void Transparency::CreateFourierImage()
             pixel.g = (sf::Uint8)(pixel.g * pixelValue);
             pixel.b = (sf::Uint8)(pixel.b * pixelValue);
 
-            image.setPixel(x, y, pixel);
+            imageFourier.setPixel(x, y, pixel);
         }
     }
 
-    texture.create(WindowXSize, WindowYSize);
-    texture.update(image);
-    sprite.setTexture(texture, true);
+    textureFourier.create(WindowXSize, WindowYSize);
+    textureFourier.update(imageFourier);
+    spriteFourier.setTexture(textureFourier, true);
 }
 
 void Transparency::CreateImage(dataT z, dataT lambda, dataT scale)
