@@ -18,7 +18,9 @@ enum ObjType
     EDGE,
     GAP,
     CIRCLE,
-    SQUARE
+    SQUARE,
+    LATTICE,
+    GRID
 };
 
 extern const int OBJECT_CNT;

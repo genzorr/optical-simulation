@@ -146,6 +146,100 @@ void Transparency::Update(int XSize)
             }
         }
     }
+    else if (type == LATTICE)
+    {
+        int lineWidth = 2*3;    /// Must be 2*k, k = 1, 2, ...
+        int left = (int)((WindowXSize - lineWidth/2) / 2);
+        while (left + lineWidth < WindowXSize) {
+            for (int x = left; x < left + lineWidth; x++) {
+                std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0);
+                for (int y = 0; y < WindowYSize; y++)
+                    image.setPixel(x, y, pixelColor);
+            }
+            left += lineWidth + XSize;
+        }
+
+
+        left = (int)((WindowXSize - lineWidth/2) / 2) - lineWidth - XSize;
+        while (left > 0) {
+            for (int x = left; x < left + lineWidth; x++) {
+                std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0);
+                for (int y = 0; y < WindowYSize; y++)
+                    image.setPixel(x, y, pixelColor);
+            }
+            left -= lineWidth + XSize;
+        }
+
+    }
+    else if (type == GRID)
+    {
+        float inverted = 0;   /// Set to 0 or 1.0 to invert the grid
+        int lineWidth = 2*1;    /// Must be 2*k, k = 1, 2, ...
+        for (int i = 0; i < WindowXSize; i++)
+        {
+            absoluteOpaque[i].resize(WindowXSize);
+            relativeOpaque[i].resize(WindowXSize);
+            std::fill(absoluteOpaque[i].begin(), absoluteOpaque[i].end(), inverted);
+            std::fill(relativeOpaque[i].begin(), relativeOpaque[i].end(), inverted);
+
+            fourierImage[i].resize(WindowXSize);
+            std::fill(fourierImage[i].begin(), fourierImage[i].end(), complex(0, 0));
+        }
+
+
+
+        ///Draw vertical lines
+        int left = (int)((WindowXSize - lineWidth/2) / 2);
+        while (left + lineWidth < WindowXSize) {
+            for (int x = left; x < left + lineWidth; x++) {
+                std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0 - inverted);
+                for (int y = 0; y < WindowYSize; y++)
+                    image.setPixel(x, y, pixelColor);
+            }
+            left += lineWidth + XSize;
+        }
+
+
+        left = (int)((WindowXSize - lineWidth/2) / 2) - lineWidth - XSize;
+        while (left > 0) {
+            for (int x = left; x < left + lineWidth; x++) {
+                std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0 - inverted);
+                for (int y = 0; y < WindowYSize; y++)
+                    image.setPixel(x, y, pixelColor);
+            }
+            left -= lineWidth + XSize;
+        }
+
+
+        ///Draw horizontal lines
+        int up = (int)((WindowXSize - lineWidth/2) / 2);
+        while (up + lineWidth < WindowXSize) {
+            for (int x = up; x < up + lineWidth; x++) {
+                for (int i = 0; i < WindowXSize; i++) {
+                    absoluteOpaque[i][x] = 1.0 - inverted;
+                }
+
+                for (int y = 0; y < WindowYSize; y++)
+                    image.setPixel(x, y, pixelColor);
+            }
+            up += lineWidth + XSize;
+        }
+
+
+        up = (int)((WindowXSize - lineWidth/2) / 2) - lineWidth - XSize;
+        while (up > 0) {
+            for (int x = up; x < up + lineWidth; x++) {
+                for (int i = 0; i < WindowXSize; i++) {
+                    absoluteOpaque[i][x] = 1.0 - inverted;
+                }
+
+                for (int y = 0; y < WindowYSize; y++)
+                    image.setPixel(x, y, pixelColor);
+            }
+            up -= lineWidth + XSize;
+        }
+
+    }
 
     setRelativeOpaque();
 
@@ -333,7 +427,7 @@ void Transparency::UpdateSize(int size)
 {
     Update(size);
 //    relativeOpaqueImage();
-    CreateImage(10, 500E-9, 10E-6);
+    CreateImage(2, 500E-9, 10E-6);
 }
 
 void Transparency::UpdateFourier()
