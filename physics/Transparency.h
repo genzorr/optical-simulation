@@ -31,8 +31,8 @@ public:
     void CreatePreview();   /// called on update, but might be manually called for specific purposes
 
     void FourierNormalize();
-    void FourierTranslateNormalize();
-    void CountFourierImage(bool resetFourier = false, bool translate = false);           /// that and next performs ONLY fourier array fill
+    void FourierTranslate();
+    void CountFourierImage(bool resetFourier = false, bool normalize = false);           /// that and next performs ONLY fourier array fill
     void CountInverseFourierImage();
 
     void CreateFourierImage();          /// that counts fourier and fills the fourierImage

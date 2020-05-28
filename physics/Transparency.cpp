@@ -313,37 +313,31 @@ void Transparency::CreatePreview()
     spritePreview.setTexture(texturePreview, true);
 }
 
-void Transparency::CountFourierImage(bool resetFourier, bool translate)
+void Transparency::CountFourierImage(bool resetFourier, bool normalize)
 {
     if (resetFourier) CopyOpaqueFourier();
     FFT2D(fourier, WindowXSize, WindowYSize, 1);
+    FourierTranslate();
 
-    if (translate)
-        FourierTranslateNormalize();
-    else
+    if (normalize)  /// to plot fourierImage
         FourierNormalize();
 }
 
 void Transparency::CountInverseFourierImage()
 {
+    FourierTranslate();
     FFT2D(fourier, WindowXSize, WindowYSize, -1);
     FourierNormalize();
 }
 
-void Transparency::FourierTranslateNormalize()
+void Transparency::FourierTranslate()
 {
-    dataT max = 0;
     dataT2Dc copy(WindowXSize);
     for (int x = 0; x < WindowXSize; x++)
     {
         copy[x].resize(WindowYSize);
         for (int y = 0; y < WindowYSize; y++)
-        {
             copy[x][y] = fourier[x][y];
-            dataT value = std::abs(fourier[x][y]);
-            if (value > max)
-                max = value;
-        }
     }
 
     for (int x = 0; x < WindowXSize; x++)
@@ -352,7 +346,7 @@ void Transparency::FourierTranslateNormalize()
         {
             int newx = (x < WindowXSize_2) ? (WindowXSize_2 - x - 1) : (WindowXSize + WindowXSize_2 - x - 1);
             int newy = (y < WindowYSize_2) ? (WindowYSize_2 - y - 1) : (WindowYSize + WindowYSize_2 - y - 1);
-            fourier[x][y] = 255.0 * copy[newx][newy] / max;
+            fourier[x][y] = copy[newx][newy];
         }
     }
 
