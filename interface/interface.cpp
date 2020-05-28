@@ -45,7 +45,7 @@ MainWindow::MainWindow()
 //    ui.hl12->setContentsMargins(165, 96, 165, 96);
 //    ui.hl13->setContentsMargins(165, 96, 165, 96);
     /// Update size for result object
-    connect(ui.sizeBox, QOverload<int>::of(&QSpinBox::valueChanged), &(imageCanvas->resultObject), &Transparency::UpdateSize);
+    connect(ui.sizeBox, QOverload<int>::of(&QSpinBox::valueChanged), &(imageCanvas->resultObject), &Transparency::Update);
     /// For fourier image< update size and set it's output image
 //    connect(ui.sizeBox, QOverload<int>::of(&QSpinBox::valueChanged), &(fourierCanvas->resultObject), &Transparency::UpdateSize);
 //    connect(ui.sizeBox, QOverload<int>::of(&QSpinBox::valueChanged), &(fourierCanvas->resultObject), &Transparency::UpdateFourier);

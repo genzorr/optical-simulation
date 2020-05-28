@@ -8,8 +8,8 @@ void RectObstacle::Update(int sizeX, int sizeY) {
         std::fill(absoluteOpaque[i].begin(), absoluteOpaque[i].end(), 0);
         std::fill(relativeOpaque[i].begin(), relativeOpaque[i].end(), 0);
 
-        fourierImage[i].resize(WindowYSize);
-        std::fill(fourierImage[i].begin(), fourierImage[i].end(), complex(0, 0));
+        fourier[i].resize(WindowYSize);
+        std::fill(fourier[i].begin(), fourier[i].end(), complex(0, 0));
     }
 
     int left = (int)((WindowXSize - sizeX) / 2);
@@ -26,7 +26,7 @@ void RectObstacle::Update(int sizeX, int sizeY) {
 
     setRelativeOpaque();
 
-    CountFourierImage();
+    CountFourierImage(true);
 
     texture.create(WindowXSize, WindowYSize);
     texture.loadFromImage(image);
@@ -34,7 +34,7 @@ void RectObstacle::Update(int sizeX, int sizeY) {
 
     texturePreview.create(WindowXSize, WindowYSize);
 
-    createPreview();
+    CreatePreview();
 
     texturePreview.loadFromImage(imagePreview);
     spritePreview.setTexture(texturePreview, true);
@@ -42,5 +42,5 @@ void RectObstacle::Update(int sizeX, int sizeY) {
 
 void RectObstacle::UpdateSize(int sizeX, int sizeY) {
     Update(sizeX, sizeY);
-    CreateImage(5, 500E-9, 10E-6);
+    CountImage(5, 500E-9, 10E-6);
 }

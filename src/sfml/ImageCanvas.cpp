@@ -17,7 +17,7 @@ void ImageCanvas::onInit()
 
     // Fill in resultObject properly.
     Transparency cleanObj = Transparency(SQUARE, 20);
-    resultObject.Init(cleanObj);
+    resultObject.Init(&cleanObj);
 }
 
 void ImageCanvas::onUpdate()
@@ -25,10 +25,6 @@ void ImageCanvas::onUpdate()
     QSFMLCanvas::onUpdate();
 
     clear(sf::Color::White);
-
-//    for (auto& obj: objHolder) {
-//        draw(obj.sprite);
-//    }
     draw(resultObject.sprite);
 }
 
