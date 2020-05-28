@@ -20,7 +20,7 @@ void ImageCanvas::onInit()
     QSFMLCanvas::onInit();
 
     // Fill in resultObject properly.
-    Transparency cleanObj = Transparency(SQUARE, INIT_SIZE);
+    Transparency cleanObj = Transparency(LATTICE, INIT_SIZE);
     resultObject.Init(&cleanObj);
 }
 
@@ -57,4 +57,28 @@ void ImageCanvas::UpdateDistance(int distance, int size)
     DIST = distance;
     // TODO: fix that in the future
     resultObject.Update(size);
+}
+
+void ImageCanvas::MorphToGap()
+{
+    Transparency cleanObj = Transparency(GAP, INIT_SIZE);
+    resultObject.Init(&cleanObj);
+}
+
+void ImageCanvas::MorphToSquare()
+{
+    Transparency cleanObj = Transparency(SQUARE, INIT_SIZE);
+    resultObject.Init(&cleanObj);
+}
+
+void ImageCanvas::MorphToLattice()
+{
+    Transparency cleanObj = Transparency(LATTICE, INIT_SIZE);
+    resultObject.Init(&cleanObj);
+}
+
+void ImageCanvas::MorphToGrid()
+{
+    Transparency cleanObj = Transparency(GRID, INIT_SIZE);
+    resultObject.Init(&cleanObj);
 }

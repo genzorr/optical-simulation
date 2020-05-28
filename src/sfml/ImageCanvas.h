@@ -31,6 +31,11 @@ public:
 public slots:
     void UpdateLambda(int lambda, int size = -1);
     void UpdateDistance(int distance, int size = -1);
+
+    void MorphToGap();
+    void MorphToSquare();
+    void MorphToLattice();
+    void MorphToGrid();
 };
 
 

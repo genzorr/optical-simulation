@@ -164,9 +164,9 @@
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QPushButton" name="circleButton">
+          <widget class="QPushButton" name="latticeButton">
            <property name="text">
-            <string>circle</string>
+            <string>lattice</string>
            </property>
           </widget>
          </item>
@@ -360,7 +360,7 @@
                 <number>1</number>
                </property>
                <property name="maximum">
-                <number>1000</number>
+                <number>10000</number>
                </property>
                <property name="singleStep">
                 <number>2</number>

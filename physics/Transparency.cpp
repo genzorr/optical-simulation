@@ -114,6 +114,8 @@ void Transparency::UpdateImages(const Transparency *object, bool recalc)
     if (recalc) CreateFourierImage();
     textureFourier.update(imageFourier);
     spriteFourier.setTexture(textureFourier, true);
+//    spriteFourier.setOrigin(WindowXSize_2, WindowYSize_2);
+//    qDebug() << spriteFourier.getOrigin().x;
 }
 
 void Transparency::Init(const Transparency *object)
@@ -325,8 +327,8 @@ void Transparency::CountFourierImage(bool resetFourier, bool normalize)
 
 void Transparency::CountInverseFourierImage()
 {
-    FourierTranslate();
     FFT2D(fourier, WindowXSize, WindowYSize, -1);
+//    FourierTranslate();
     FourierNormalize();
 }
 
@@ -359,6 +361,20 @@ void Transparency::CreateFourierImage()
 
     CountFourierImage(true, true);
 
+//    dataT max = 0;
+//    dataT2D I(WindowXSize);
+//    for (int x = 0; x < WindowXSize; x++)
+//    {
+//        I[x].resize(WindowYSize);
+//        for (int y = 0; y < WindowYSize; y++)
+//        {
+//            dataT value = std::abs(fourier[x][y]) * std::abs(fourier[x][y]);
+//            I[x][y] = value;
+//            if (value > max)
+//                max = value;
+//        }
+//    }
+
     for (int x = 0; x < WindowXSize; x++)
     {
         for (int y = 0; y < WindowYSize; y++)
@@ -367,6 +383,9 @@ void Transparency::CreateFourierImage()
             dataT intense = std::abs(value);
 
             dataT pixelValue = (dataT)std::min(int(intense), 255) / 255.f;
+//            dataT value = I[x][y] / max;
+//            dataT pixelValue = value;
+
             sf::Color pixel = pixelColor;
             pixel.r = (sf::Uint8)(pixel.r * pixelValue);
             pixel.g = (sf::Uint8)(pixel.g * pixelValue);
@@ -378,16 +397,23 @@ void Transparency::CreateFourierImage()
 
     textureFourier.create(WindowXSize, WindowYSize);
     textureFourier.update(imageFourier);
+
+    /// Scale fourier image.
+    spriteFourier.setScale(1.f, 1.f);
     spriteFourier.setTexture(textureFourier, true);
+    spriteFourier.scale(sf::Vector2f((float)LAMBDA / 400, (float)LAMBDA / 400));
 }
 
 void Transparency::CountImage(dataT z, dataT scale)
 {
     CountFourierImage(true, false);
 
-    dataT lambda_ = (double)(lambda) * 1E-9;
+    dataT lambda_ = (double)(1050 - lambda) * 1E-9;
     dataT z_2 = z*z; // m^2
     dataT k_z_2 = z_2 * 2 * M_PI / lambda_; // m
+
+//    dataT k = 2 * M_PI;
+//    dataT k_2 = k*k;
     dataT scale_2 = scale*scale;
 
     /// Iterate through all x y and apply z offset like complex exponent.
@@ -396,8 +422,14 @@ void Transparency::CountImage(dataT z, dataT scale)
         dataT x_2 = x * x * scale_2;
         for (int y = -WindowYSize_2; y < WindowYSize_2; y++)
         {
-            dataT value = k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
-            complex exp(cos(value), -sin(value));
+            dataT value = - k_z_2 / sqrt(x_2 + y*y*scale_2 + z_2);
+
+//            dataT k_x = M_PI * x / 256;
+//            dataT k_y = M_PI * y / 256;
+//            dataT k_z = sqrt(k_2 - k_x*k_x - k_y*k_y);
+//            dataT value = - k_z * z;
+
+            complex exp(cos(value), sin(value));
             fourier[x + WindowXSize_2][y + WindowYSize_2] *= exp;
         }
     }
@@ -411,6 +443,20 @@ void Transparency::CreateImage()
     if ((image.getSize().x != WindowXSize) or (image.getSize().y != WindowYSize))
         image.create(WindowXSize, WindowYSize, sf::Color::Black);
 
+//    dataT max = 0;
+//    dataT2D I(WindowXSize);
+//    for (int x = 0; x < WindowXSize; x++)
+//    {
+//        I[x].resize(WindowYSize);
+//        for (int y = 0; y < WindowYSize; y++)
+//        {
+//            dataT value = std::abs(fourier[x][y]) * std::abs(fourier[x][y]);
+//            I[x][y] = value;
+//            if (value > max)
+//                max = value;
+//        }
+//    }
+
     for (int x = 0; x < WindowXSize; x++)
     {
         for (int y = 0; y < WindowYSize; y++)
@@ -419,6 +465,9 @@ void Transparency::CreateImage()
             dataT intense = std::abs(value);
 
             dataT pixelValue = (dataT)std::min(int(intense), 255) / 255.f;
+//            dataT value = I[x][y] / max;
+//            dataT pixelValue = value;
+
             sf::Color pixel = pixelColor;
             pixel.r = (sf::Uint8)(pixel.r * pixelValue);
             pixel.g = (sf::Uint8)(pixel.g * pixelValue);
@@ -440,6 +489,7 @@ void Transparency::FourierNormalize()
     {
         for (int y = 0; y < WindowYSize; y++)
         {
+//            fourier[x][y] *= fourier[x][y];
             dataT value = std::abs(fourier[x][y]);
             if (value > max)
                 max = value;
@@ -461,7 +511,7 @@ void Transparency::Update(int size)
     UpdateSize(size);
 
     dataT distMeters = (dataT)DIST / 100;
-    CountImage(distMeters, 10E-6);
+    CountImage(distMeters, 1E-4);
 }
 
 void Transparency::setRelativeOpaque(const Transparency *object) {

@@ -39,6 +39,8 @@ public:
     void CreateImage();
     void CountImage(dataT z, dataT scale);
 
+    void FourierFromImage();
+
 public slots:
     void Update(int size = -1);
 

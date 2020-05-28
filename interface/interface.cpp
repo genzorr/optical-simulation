@@ -63,6 +63,15 @@ MainWindow::MainWindow()
     ui.distDisplay->display(ui.distValue->value());
     connect(ui.distValue, SIGNAL(valueChanged(int)), ui.distDisplay, SLOT(display(int)));
     connect(ui.distValue, SIGNAL(valueChanged(int)), imageCanvas, SLOT(UpdateDistance(int)));
+
+    /// Create gap from object.
+    connect(ui.gapButton, SIGNAL(clicked(bool)), imageCanvas, SLOT(MorphToGap()));
+    connect(ui.squareButton, SIGNAL(clicked(bool)), imageCanvas, SLOT(MorphToSquare()));
+    connect(ui.latticeButton, SIGNAL(clicked(bool)), imageCanvas, SLOT(MorphToLattice()));
+    connect(ui.gridButton, SIGNAL(clicked(bool)), imageCanvas, SLOT(MorphToGrid()));
+
+    imageCanvas->resultObject.spriteFourier.setOrigin(WindowXSize_2, WindowYSize_2);
+    imageCanvas->resultObject.spriteFourier.setPosition(WindowXSize_2, WindowYSize_2);
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)
