@@ -422,7 +422,7 @@ void Transparency::CountImage(dataT z, dataT scale)
         dataT x_2 = x * x * scale_2;
         for (int y = -WindowYSize_2; y < WindowYSize_2; y++)
         {
-            dataT value = - k_z_2 / sqrt(x_2 + y*y*scale_2 + z_2);
+            dataT value = - k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
 
 //            dataT k_x = M_PI * x / 256;
 //            dataT k_y = M_PI * y / 256;
