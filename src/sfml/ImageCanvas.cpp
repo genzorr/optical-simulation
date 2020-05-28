@@ -5,6 +5,8 @@
 
 int INIT_SIZE = 0;
 int LAMBDA = 500;
+int DIST = 0;
+
 int WindowXSize = 512;
 int WindowYSize = 512;
 int WindowXSize_2 = 256;
@@ -46,6 +48,13 @@ Transparency *ImageCanvas::getObject()
 void ImageCanvas::UpdateLambda(int lambda, int size)
 {
     LAMBDA = lambda;
+    // TODO: fix that in the future
+    resultObject.Update(size);
+}
+
+void ImageCanvas::UpdateDistance(int distance, int size)
+{
+    DIST = distance;
     // TODO: fix that in the future
     resultObject.Update(size);
 }

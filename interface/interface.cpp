@@ -46,6 +46,7 @@ MainWindow::MainWindow()
 //    ui.hl13->setContentsMargins(165, 96, 165, 96);
 
     INIT_SIZE = ui.sizeValue->value();
+    DIST = ui.distValue->value();
     ui.sizeDisplay->display(INIT_SIZE);
     imageCanvas->UpdateLambda(DEFAULT_WAVELEN);
 
@@ -57,6 +58,11 @@ MainWindow::MainWindow()
     ui.lambdaDisplay->display(ui.lambdaValue->value());
     connect(ui.lambdaValue, SIGNAL(valueChanged(int)), ui.lambdaDisplay, SLOT(display(int)));
     connect(ui.lambdaValue, SIGNAL(valueChanged(int)), imageCanvas, SLOT(UpdateLambda(int)));
+
+    /// Update distance.
+    ui.distDisplay->display(ui.distValue->value());
+    connect(ui.distValue, SIGNAL(valueChanged(int)), ui.distDisplay, SLOT(display(int)));
+    connect(ui.distValue, SIGNAL(valueChanged(int)), imageCanvas, SLOT(UpdateDistance(int)));
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)

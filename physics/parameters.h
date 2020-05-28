@@ -26,6 +26,8 @@ extern const int OBJECT_CNT;
 
 extern int INIT_SIZE;
 extern int LAMBDA;
+extern int DIST;
+
 extern int WindowXSize;
 extern int WindowYSize;
 extern int WindowXSize_2;

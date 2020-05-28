@@ -459,8 +459,11 @@ void Transparency::FourierNormalize()
 
 void Transparency::Update(int size)
 {
+    if (size != -1) INIT_SIZE = size;
     UpdateSize(size);
-    CountImage(10, 10E-6);
+
+    dataT distMeters = (dataT)DIST / 100;
+    CountImage(distMeters, 10E-6);
 }
 
 void Transparency::setRelativeOpaque(const Transparency *object) {
