@@ -27,6 +27,9 @@ private:
 public:
     Transparency resultObject;
     ObjHolder objHolder;
+
+public slots:
+    void UpdateLambda(int lambda, int size = -1);
 };
 
 

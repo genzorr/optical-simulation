@@ -15,7 +15,6 @@ typedef std::vector<std::vector<complex>> dataT2Dc;
 enum ObjType
 {
     NO = 0,
-    EDGE,
     GAP,
     CIRCLE,
     SQUARE
@@ -23,6 +22,8 @@ enum ObjType
 
 extern const int OBJECT_CNT;
 
+extern int INIT_SIZE;
+extern int LAMBDA;
 extern int WindowXSize;
 extern int WindowYSize;
 extern int WindowXSize_2;

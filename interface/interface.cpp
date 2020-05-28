@@ -44,15 +44,19 @@ MainWindow::MainWindow()
 //    ui.hl11->setContentsMargins(165, 96, 165, 96);
 //    ui.hl12->setContentsMargins(165, 96, 165, 96);
 //    ui.hl13->setContentsMargins(165, 96, 165, 96);
-    /// Update size for result object
-    connect(ui.sizeBox, QOverload<int>::of(&QSpinBox::valueChanged), &(imageCanvas->resultObject), &Transparency::Update);
-    /// For fourier image< update size and set it's output image
-//    connect(ui.sizeBox, QOverload<int>::of(&QSpinBox::valueChanged), &(fourierCanvas->resultObject), &Transparency::UpdateSize);
-//    connect(ui.sizeBox, QOverload<int>::of(&QSpinBox::valueChanged), &(fourierCanvas->resultObject), &Transparency::UpdateFourier);
-    /// Manually update output fourier image
-    //connect(ui.fourierButton, &QPushButton::pressed, &(fourierCanvas->resultObject), &Transparency::UpdateFourier);
-//    fourierCanvas->resultObject.UpdateFourier();
 
+    INIT_SIZE = ui.sizeValue->value();
+    ui.sizeDisplay->display(INIT_SIZE);
+    imageCanvas->UpdateLambda(DEFAULT_WAVELEN);
+
+    /// Update size of result object.
+    connect(ui.sizeValue, SIGNAL(valueChanged(int)), ui.sizeDisplay, SLOT(display(int)));
+    connect(ui.sizeValue, SIGNAL(valueChanged(int)), &(imageCanvas->resultObject), SLOT(Update(int)));
+
+    /// Update lambda value from slider.
+    ui.lambdaDisplay->display(ui.lambdaValue->value());
+    connect(ui.lambdaValue, SIGNAL(valueChanged(int)), ui.lambdaDisplay, SLOT(display(int)));
+    connect(ui.lambdaValue, SIGNAL(valueChanged(int)), imageCanvas, SLOT(UpdateLambda(int)));
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)

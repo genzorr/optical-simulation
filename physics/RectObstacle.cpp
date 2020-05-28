@@ -42,5 +42,5 @@ void RectObstacle::Update(int sizeX, int sizeY) {
 
 void RectObstacle::UpdateSize(int sizeX, int sizeY) {
     Update(sizeX, sizeY);
-    CountImage(5, 500E-9, 10E-6);
+    CountImage(5, 10E-6);
 }

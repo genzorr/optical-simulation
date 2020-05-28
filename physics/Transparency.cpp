@@ -7,38 +7,44 @@
 Transparency::Transparency() : type(NO)
 {
     /// Init pixel color.
-    pixelColor = WaveRGB::Calc(DEFAULT_WAVELEN);
+    lambda = LAMBDA;
+    pixelColor = WaveRGB::Calc(LAMBDA);
 
     UpdateArrays(nullptr, 1);
 
     /// Initialize images.
     UpdateImages();
 
-    /// TODO: FIX HERE: should obtain value from default QSpinBox value.
-    Update(2);
+    Update(INIT_SIZE);
 }
 
-Transparency::Transparency(ObjType objType, int XSize) : type(objType)
+Transparency::Transparency(ObjType objType, int size) : type(objType)
 {
+    lambda = LAMBDA;
+    pixelColor = WaveRGB::Calc(LAMBDA);
+
     UpdateArrays(nullptr, 1);
     UpdateImages();
 
-    Update(XSize);
+    Update(size);
 }
 
 Transparency::Transparency(dataT2D &field, int XSize, int YSize)
 {
     // TODO: make initialization
-    pixelColor = WaveRGB::Calc(DEFAULT_WAVELEN);
+    lambda = LAMBDA;
+    pixelColor = WaveRGB::Calc(LAMBDA);
 }
 
 Transparency::Transparency(const Transparency *object)
 {
+    lambda = LAMBDA;
+    pixelColor = WaveRGB::Calc(LAMBDA);
+
     UpdateArrays(object);
     UpdateImages(object);
 
-    // TODO: also fix here
-    Update(2);
+    Update(INIT_SIZE);
 }
 
 void Transparency::UpdateArrays(const Transparency *object, dataT value)
@@ -113,52 +119,43 @@ void Transparency::UpdateImages(const Transparency *object, bool recalc)
 void Transparency::Init(const Transparency *object)
 {
     type = object->type;
+    lambda = object->lambda;
     pixelColor = object->pixelColor;
 
     UpdateArrays(object);
     UpdateImages(object);
 
-    // TODO: also fix here
-    Update(2);
+    Update(INIT_SIZE);
 }
 
 void Transparency::UpdateSize(int size)
 {
-    UpdateArrays(nullptr, 0);
+    lambda = LAMBDA;
+    pixelColor = WaveRGB::Calc(LAMBDA);
 
-    pixelColor = WaveRGB::Calc(DEFAULT_WAVELEN);
-
-    if (type == EDGE)
+    if (size != -1)
     {
-        int edgeXCoordinate = WindowXSize_2 - size;
-        for (int x = edgeXCoordinate; x < WindowXSize; x++)
+        UpdateArrays(nullptr, 0);
+
+        if (type == GAP)
         {
-            std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0);
-            for (int y = 0; y < WindowYSize; y++)
-                image.setPixel(x, y, pixelColor);
+            int left = (int) ((WindowXSize - size) / 2);
+            for (int x = left; x < WindowXSize - left; x++) {
+                std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0);
+                for (int y = 0; y < WindowYSize; y++)
+                    image.setPixel(x, y, pixelColor);
+            }
         }
-    }
-    else if (type == GAP)
-    {
-        int left = (int)((WindowXSize - size) / 2);
-        for (int x = left; x < WindowXSize - left; x++)
+        else if (type == SQUARE)
         {
-            std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0);
-            for (int y = 0; y < WindowYSize; y++)
-                image.setPixel(x, y, pixelColor);
-        }
-    }
-    else if (type == SQUARE)
-    {
-        int left = (int)((WindowXSize - size) / 2);
-        int top = (int)((WindowYSize - size) / 2);
+            int left = (int) ((WindowXSize - size) / 2);
+            int top = (int) ((WindowYSize - size) / 2);
 
-        for (int x = left; x < (WindowXSize - left); x++)
-        {
-            for (int y = top; y < (WindowYSize - top); y++)
-            {
-                absoluteOpaque[x][y] = 1;
-                image.setPixel(x, y, pixelColor);
+            for (int x = left; x < (WindowXSize - left); x++) {
+                for (int y = top; y < (WindowYSize - top); y++) {
+                    absoluteOpaque[x][y] = 1;
+                    image.setPixel(x, y, pixelColor);
+                }
             }
         }
     }
@@ -263,7 +260,6 @@ void Transparency::FourierTranslateNormalize()
 
 }
 
-// TODO: FIX THAT
 void Transparency::CreateFourierImage()
 {
     if ((imageFourier.getSize().x != WindowXSize) or (imageFourier.getSize().y != WindowYSize))
@@ -293,6 +289,31 @@ void Transparency::CreateFourierImage()
     spriteFourier.setTexture(textureFourier, true);
 }
 
+void Transparency::CountImage(dataT z, dataT scale)
+{
+    CountFourierImage(true);
+
+    dataT lambda_ = (double)lambda * 1E-9;
+    dataT z_2 = z*z; // m^2
+    dataT k_z_2 = z_2 * 2 * M_PI / lambda_; // m
+    dataT scale_2 = scale*scale;
+
+    /// Iterate through all x y and apply z offset like complex exponent.
+    for (int x = -WindowXSize_2; x < WindowXSize_2; x++)
+    {
+        dataT x_2 = x * x * scale_2;
+        for (int y = -WindowYSize_2; y < WindowYSize_2; y++)
+        {
+            dataT value = -k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
+            complex exp(cos(value), sin(value));
+            fourier[x + WindowXSize_2][y + WindowYSize_2] *= exp;
+        }
+    }
+
+    CountInverseFourierImage();
+    CreateImage();
+}
+
 void Transparency::CreateImage()
 {
     if ((image.getSize().x != WindowXSize) or (image.getSize().y != WindowYSize))
@@ -320,32 +341,6 @@ void Transparency::CreateImage()
     sprite.setTexture(texture, true);
 }
 
-void Transparency::CountImage(dataT z, dataT lambda, dataT scale)
-{
-    CountFourierImage(true);
-
-    dataT z_2 = z*z; // m^2
-    dataT k_z_2 = z_2 * 2 * M_PI / lambda; // m
-    dataT scale_2 = scale*scale;
-
-    /// Iterate through all x y and apply z offset like complex exponent.
-    for (int x = -WindowXSize_2; x < WindowXSize_2; x++)
-    {
-        dataT x_2 = x * x * scale_2;
-        for (int y = -WindowYSize_2; y < WindowYSize_2; y++)
-        {
-            dataT value = -k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
-            complex exp(cos(value), sin(value));
-            fourier[x + WindowXSize_2][y + WindowYSize_2] *= exp;
-        }
-    }
-
-    CountInverseFourierImage();
-
-    // TODO: load image from fourier
-    CreateImage();
-}
-
 void Transparency::FourierNormalize()
 {
     dataT max = 0;
@@ -371,7 +366,7 @@ void Transparency::FourierNormalize()
 void Transparency::Update(int size)
 {
     UpdateSize(size);
-    CountImage(10, 500E-9, 10E-6);
+    CountImage(10, 10E-6);
 }
 
 void Transparency::setRelativeOpaque(const Transparency *object) {

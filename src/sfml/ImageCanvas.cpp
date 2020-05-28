@@ -3,6 +3,8 @@
 #include "Fourier.h"
 #include <QDebug>
 
+int INIT_SIZE = 0;
+int LAMBDA = 500;
 int WindowXSize = 512;
 int WindowYSize = 512;
 int WindowXSize_2 = 256;
@@ -16,7 +18,8 @@ void ImageCanvas::onInit()
     QSFMLCanvas::onInit();
 
     // Fill in resultObject properly.
-    Transparency cleanObj = Transparency(SQUARE, 20);
+    qDebug() << INIT_SIZE;
+    Transparency cleanObj = Transparency(SQUARE, INIT_SIZE);
     resultObject.Init(&cleanObj);
 }
 
@@ -39,4 +42,11 @@ void ImageCanvas::resizeEvent(QResizeEvent *event)
 Transparency *ImageCanvas::getObject()
 {
     return &resultObject;
+}
+
+void ImageCanvas::UpdateLambda(int lambda, int size)
+{
+    LAMBDA = lambda;
+    // TODO: fix that in the future
+    resultObject.Update(size);
 }

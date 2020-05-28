@@ -15,7 +15,7 @@ Q_OBJECT
 public:
     Transparency();
     Transparency(const Transparency *object);   /// construct object from given
-    Transparency(ObjType objType, int XSize);           /// EDGE, GAP or CIRCLE
+    Transparency(ObjType objType, int size);           /// EDGE, GAP or CIRCLE
     Transparency(dataT2D& field, int XSize, int YSize); /// random field XSize*YSize
     virtual ~Transparency() {}
 
@@ -37,10 +37,10 @@ public:
 
     void CreateFourierImage();          /// that counts fourier and fills the fourierImage
     void CreateImage();
-    void CountImage(dataT z, dataT lambda, dataT scale);
+    void CountImage(dataT z, dataT scale);
 
 public slots:
-    void Update(int size);
+    void Update(int size = -1);
 
 public:
     double position;                /// Distance from light emitter
@@ -50,6 +50,7 @@ public:
     dataT2Dc fourier;
 
     sf::Color pixelColor;
+    dataT lambda;
 
     sf::Image image;
     sf::Texture texture;
