@@ -158,6 +158,100 @@ void Transparency::UpdateSize(int size)
                 }
             }
         }
+        else if (type == LATTICE)
+        {
+            int lineWidth = 2*3;    /// Must be 2*k, k = 1, 2, ...
+            int left = (int)((WindowXSize - lineWidth/2) / 2);
+            while (left + lineWidth < WindowXSize) {
+                for (int x = left; x < left + lineWidth; x++) {
+                    std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0);
+                    for (int y = 0; y < WindowYSize; y++)
+                        image.setPixel(x, y, pixelColor);
+                }
+                left += lineWidth + size;
+            }
+
+
+            left = (int)((WindowXSize - lineWidth/2) / 2) - lineWidth - size;
+            while (left > 0) {
+                for (int x = left; x < left + lineWidth; x++) {
+                    std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0);
+                    for (int y = 0; y < WindowYSize; y++)
+                        image.setPixel(x, y, pixelColor);
+                }
+                left -= lineWidth + size;
+            }
+
+        }
+        else if (type == GRID)
+        {
+            float inverted = 0;   /// Set to 0 or 1.0 to invert the grid
+            int lineWidth = 2*1;    /// Must be 2*k, k = 1, 2, ...
+            for (int i = 0; i < WindowXSize; i++)
+            {
+                absoluteOpaque[i].resize(WindowXSize);
+                relativeOpaque[i].resize(WindowXSize);
+                std::fill(absoluteOpaque[i].begin(), absoluteOpaque[i].end(), inverted);
+                std::fill(relativeOpaque[i].begin(), relativeOpaque[i].end(), inverted);
+
+                fourier[i].resize(WindowXSize);
+                std::fill(fourier[i].begin(), fourier[i].end(), complex(0, 0));
+            }
+
+
+
+            ///Draw vertical lines
+            int left = (int)((WindowXSize - lineWidth/2) / 2);
+            while (left + lineWidth < WindowXSize) {
+                for (int x = left; x < left + lineWidth; x++) {
+                    std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0 - inverted);
+                    for (int y = 0; y < WindowYSize; y++)
+                        image.setPixel(x, y, pixelColor);
+                }
+                left += lineWidth + size;
+            }
+
+
+            left = (int)((WindowXSize - lineWidth/2) / 2) - lineWidth - size;
+            while (left > 0) {
+                for (int x = left; x < left + lineWidth; x++) {
+                    std::fill(absoluteOpaque[x].begin(), absoluteOpaque[x].end(), 1.0 - inverted);
+                    for (int y = 0; y < WindowYSize; y++)
+                        image.setPixel(x, y, pixelColor);
+                }
+                left -= lineWidth + size;
+            }
+
+
+            ///Draw horizontal lines
+            int up = (int)((WindowXSize - lineWidth/2) / 2);
+            while (up + lineWidth < WindowXSize) {
+                for (int x = up; x < up + lineWidth; x++) {
+                    for (int i = 0; i < WindowXSize; i++) {
+                        absoluteOpaque[i][x] = 1.0 - inverted;
+                    }
+
+                    for (int y = 0; y < WindowYSize; y++)
+                        image.setPixel(x, y, pixelColor);
+                }
+                up += lineWidth + size;
+            }
+
+
+            up = (int)((WindowXSize - lineWidth/2) / 2) - lineWidth - size;
+            while (up > 0) {
+                for (int x = up; x < up + lineWidth; x++) {
+                    for (int i = 0; i < WindowXSize; i++) {
+                        absoluteOpaque[i][x] = 1.0 - inverted;
+                    }
+
+                    for (int y = 0; y < WindowYSize; y++)
+                        image.setPixel(x, y, pixelColor);
+                }
+                up -= lineWidth + size;
+            }
+
+        }
     }
 
     setRelativeOpaque();
@@ -304,7 +398,7 @@ void Transparency::CountImage(dataT z, dataT scale)
         dataT x_2 = x * x * scale_2;
         for (int y = -WindowYSize_2; y < WindowYSize_2; y++)
         {
-            dataT value = -k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
+            dataT value = k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
             complex exp(cos(value), sin(value));
             fourier[x + WindowXSize_2][y + WindowYSize_2] *= exp;
         }
