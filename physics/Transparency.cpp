@@ -313,11 +313,15 @@ void Transparency::CreatePreview()
     spritePreview.setTexture(texturePreview, true);
 }
 
-void Transparency::CountFourierImage(bool resetFourier)
+void Transparency::CountFourierImage(bool resetFourier, bool translate)
 {
     if (resetFourier) CopyOpaqueFourier();
     FFT2D(fourier, WindowXSize, WindowYSize, 1);
-    FourierTranslateNormalize();
+
+    if (translate)
+        FourierTranslateNormalize();
+    else
+        FourierNormalize();
 }
 
 void Transparency::CountInverseFourierImage()
@@ -359,7 +363,7 @@ void Transparency::CreateFourierImage()
     if ((imageFourier.getSize().x != WindowXSize) or (imageFourier.getSize().y != WindowYSize))
         imageFourier.create(WindowXSize, WindowYSize, sf::Color::Black);
 
-    CountFourierImage(true);
+    CountFourierImage(true, true);
 
     for (int x = 0; x < WindowXSize; x++)
     {
@@ -385,9 +389,9 @@ void Transparency::CreateFourierImage()
 
 void Transparency::CountImage(dataT z, dataT scale)
 {
-    CountFourierImage(true);
+    CountFourierImage(true, false);
 
-    dataT lambda_ = (double)lambda * 1E-9;
+    dataT lambda_ = (double)(lambda) * 1E-9;
     dataT z_2 = z*z; // m^2
     dataT k_z_2 = z_2 * 2 * M_PI / lambda_; // m
     dataT scale_2 = scale*scale;
@@ -399,7 +403,7 @@ void Transparency::CountImage(dataT z, dataT scale)
         for (int y = -WindowYSize_2; y < WindowYSize_2; y++)
         {
             dataT value = k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
-            complex exp(cos(value), sin(value));
+            complex exp(cos(value), -sin(value));
             fourier[x + WindowXSize_2][y + WindowYSize_2] *= exp;
         }
     }
