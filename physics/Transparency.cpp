@@ -327,8 +327,8 @@ void Transparency::CountFourierImage(bool resetFourier, bool normalize)
 
 void Transparency::CountInverseFourierImage()
 {
+    FourierTranslate();
     FFT2D(fourier, WindowXSize, WindowYSize, -1);
-//    FourierTranslate();
     FourierNormalize();
 }
 
@@ -346,8 +346,11 @@ void Transparency::FourierTranslate()
     {
         for (int y = 0; y < WindowYSize; y++)
         {
-            int newx = (x < WindowXSize_2) ? (WindowXSize_2 - x - 1) : (WindowXSize + WindowXSize_2 - x - 1);
-            int newy = (y < WindowYSize_2) ? (WindowYSize_2 - y - 1) : (WindowYSize + WindowYSize_2 - y - 1);
+//            int newx = (x < WindowXSize_2) ? (WindowXSize_2 - x - 1) : (WindowXSize + WindowXSize_2 - x - 1);
+//            int newy = (y < WindowYSize_2) ? (WindowYSize_2 - y - 1) : (WindowYSize + WindowYSize_2 - y - 1);
+            int newx = (x < WindowXSize_2) ? (x + WindowXSize_2) : (x - WindowXSize_2);
+            int newy = (y < WindowYSize_2) ? (y + WindowYSize_2) : (y - WindowYSize_2);
+
             fourier[x][y] = copy[newx][newy];
         }
     }
@@ -408,12 +411,12 @@ void Transparency::CountImage(dataT z, dataT scale)
 {
     CountFourierImage(true, false);
 
-    dataT lambda_ = (double)(1050 - lambda) * 1E-9;
-    dataT z_2 = z*z; // m^2
-    dataT k_z_2 = z_2 * 2 * M_PI / lambda_; // m
+    dataT lambda_ = (double)(lambda) * 1E-9;
+//    dataT z_2 = z*z; // m^2
+//    dataT k_z_2 = z_2 * 2 * M_PI / lambda_; // m
 
-//    dataT k = 2 * M_PI;
-//    dataT k_2 = k*k;
+    dataT k = 2 * M_PI;
+    dataT k_2 = k*k;
     dataT scale_2 = scale*scale;
 
     /// Iterate through all x y and apply z offset like complex exponent.
@@ -422,12 +425,12 @@ void Transparency::CountImage(dataT z, dataT scale)
         dataT x_2 = x * x * scale_2;
         for (int y = -WindowYSize_2; y < WindowYSize_2; y++)
         {
-            dataT value = - k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
+//            dataT value = - k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
 
-//            dataT k_x = M_PI * x / 256;
-//            dataT k_y = M_PI * y / 256;
-//            dataT k_z = sqrt(k_2 - k_x*k_x - k_y*k_y);
-//            dataT value = - k_z * z;
+            dataT k_x = M_PI * x / (256);
+            dataT k_y = M_PI * y / (256);
+            dataT k_z = sqrt(k_2 - k_x*k_x - k_y*k_y);
+            dataT value = k_z * z / lambda_;
 
             complex exp(cos(value), sin(value));
             fourier[x + WindowXSize_2][y + WindowYSize_2] *= exp;
@@ -510,8 +513,8 @@ void Transparency::Update(int size)
     if (size != -1) INIT_SIZE = size;
     UpdateSize(size);
 
-    dataT distMeters = (dataT)DIST / 100;
-    CountImage(distMeters, 1E-4);
+    dataT distMeters = (dataT)DIST / 1;
+    CountImage(distMeters, 1E-3);
 }
 
 void Transparency::setRelativeOpaque(const Transparency *object) {
