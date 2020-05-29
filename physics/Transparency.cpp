@@ -416,6 +416,8 @@ void Transparency::CountImage(dataT z, dataT scale)
 //    dataT k_z_2 = z_2 * 2 * M_PI / lambda_; // m
 
     dataT k = 2 * M_PI;
+    dataT coeff = (M_PI / 256) * (M_PI / 256);
+
     dataT k_2 = k*k;
     dataT scale_2 = scale*scale;
 
@@ -427,10 +429,10 @@ void Transparency::CountImage(dataT z, dataT scale)
         {
 //            dataT value = - k_z_2 * sqrt(x_2 + y*y*scale_2 + z_2);
 
-            dataT k_x = M_PI * x / (256);
-            dataT k_y = M_PI * y / (256);
-            dataT k_z = sqrt(k_2 - k_x*k_x - k_y*k_y);
-            dataT value = k_z * z / lambda_;
+            dataT k_x_2 = coeff * x_2;
+            dataT k_y_2 = coeff * y * y * scale_2;
+            dataT k_z = sqrt(k_2 - k_x_2 - k_y_2);
+            dataT value = - k_z * z / lambda_;
 
             complex exp(cos(value), sin(value));
             fourier[x + WindowXSize_2][y + WindowYSize_2] *= exp;
@@ -466,8 +468,8 @@ void Transparency::CreateImage()
         {
             complex value = fourier[x][y];
             dataT intense = std::abs(value);
-
             dataT pixelValue = (dataT)std::min(int(intense), 255) / 255.f;
+
 //            dataT value = I[x][y] / max;
 //            dataT pixelValue = value;
 
@@ -513,8 +515,8 @@ void Transparency::Update(int size)
     if (size != -1) INIT_SIZE = size;
     UpdateSize(size);
 
-    dataT distMeters = (dataT)DIST / 1;
-    CountImage(distMeters, 1E-3);
+    dataT distMeters = (dataT)DIST / 100;
+    CountImage(distMeters, 1E-2);
 }
 
 void Transparency::setRelativeOpaque(const Transparency *object) {
