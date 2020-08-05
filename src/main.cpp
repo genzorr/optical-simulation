@@ -1,16 +1,15 @@
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
+#include <QApplication>
+#include <QMainWindow>
+#include <QDebug>
+
+#include "interface.h"
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication app(argc, argv);
 
-    QGuiApplication app(argc, argv);
-
-    QQmlApplicationEngine engine;
-    engine.load(QUrl("qrc:/interface/main.qml"));
-    if (engine.rootObjects().isEmpty())
-        return -1;
+    MainWindow mainWindow;
+    mainWindow.showFullScreen();
 
     return app.exec();
 }
